@@ -4,23 +4,21 @@
 
 Work in progress!
 
-## Requrements:
+## Requirements
 
-- Needs nodejs version 7.2.2
+- Node.js v7.6.0
 
 ## Development notes
 
 ### Testing
+
 ```
 npm install
-npm run test
+npm test
 ```
 
-### To run
+### Running
 
 ```
 node .
 ```
-
-
-
