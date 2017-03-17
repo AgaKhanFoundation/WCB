@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "restFul server for wcf mobile apps",
   "main": "index.js",
+  "private": true,
+  "engines" : {
+    "node" : ">=7.7.2"
+  },
   "scripts": {
     "lint": "eslint .",
     "test": "mocha --recursive"
@@ -15,7 +19,7 @@
     "walkingApps"
   ],
   "author": "moizjv@gmail.com",
-  "license": "SEE LICENSE IN LICENSE file",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/AgaKhanFoundation/WCB/issues"
   },
