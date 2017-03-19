@@ -23,3 +23,18 @@ npm test
 ```
 node .
 ```
+### Docker Instructions
+
+To build the docker container locally
+
+```
+docker build -t <name> .
+```
+
+To run docker container locally
+
+```
+docker run -p <host-port>:7777 -d <name>
+```
+
+TODO: Update quay.io Instruction
