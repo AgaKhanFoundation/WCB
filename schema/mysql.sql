@@ -1,4 +1,4 @@
-REATE TABLE `team` (
+CREATE TABLE `team` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL UNIQUE,
   PRIMARY KEY (`id`)
