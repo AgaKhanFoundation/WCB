@@ -1,3 +1,6 @@
+CREATE DATABASE wcb;
+use wcb;
+
 CREATE TABLE `team` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL UNIQUE,
@@ -67,4 +70,3 @@ ALTER TABLE `sponsorship` ADD CONSTRAINT `sponsorship_fk1` FOREIGN KEY (`sponsor
 ALTER TABLE `accomplishment` ADD CONSTRAINT `accomplishment_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
 ALTER TABLE `accomplishment` ADD CONSTRAINT `accomplishment_fk1` FOREIGN KEY (`destination`) REFERENCES `destinations`(`id`);
-
