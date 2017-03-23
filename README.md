@@ -21,7 +21,7 @@ npm test
 ### Running
 
 ```
-node .
+NODE_ENV=test node .
 ```
 ### Docker Instructions
 
