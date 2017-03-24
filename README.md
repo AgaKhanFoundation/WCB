@@ -21,8 +21,9 @@ npm test
 ### Running
 
 ```
-NODE_ENV=test node .
+npm start
 ```
+
 ### Docker Instructions
 
 To build the docker container locally
