@@ -34,7 +34,12 @@ docker build -t <name> .
 To run docker container locally
 
 ```
-docker run -p <host-port>:7777 -d <name>
+docker run -p <host-port>:7777 -e "NODE_ENV=test" -d <name>
 ```
 
-TODO: Update quay.io Instruction
+To run quay-image-name
+
+```
+docker pull quay.io/nidhisd/wcb
+docker run -p <host-port>:7777 -e "NODE_ENV=test" -d quay.io/nidhisd/wcb
+```
