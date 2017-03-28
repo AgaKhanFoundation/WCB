@@ -6,22 +6,15 @@ Work in progress!
 
 ## Requirements
 
-- Node.js v7.6.0
+- [Node.js](https://nodejs.org) v7.7.2
 
-## Development notes
-
-### Testing
+## Development
 
 ```
 npm install
 npm run lint
 npm test
-```
-
-### Running
-
-```
-npm start
+npm run start-dev
 ```
 
 ### Docker Instructions
