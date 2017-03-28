@@ -9,7 +9,7 @@ chai.use(chaiAsPromised)
 
 describe('Team model', () => {
   before(() => {
-    return model.db.sequelize.sync()
+    return model.db.sequelize.sync({force: true})
   })
   it('should save team', async () => {
     let team = await model.db.team.create({id: 1, name: 'abc'})
