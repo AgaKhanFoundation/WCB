@@ -9,6 +9,7 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "start-dev": "NODE_ENV=dev nodemon .",
     "test": "NODE_ENV=test mocha --recursive"
   },
   "repository": {
@@ -26,6 +27,7 @@
   "homepage": "https://github.com/AgaKhanFoundation/WCB#readme",
   "dependencies": {
     "koa": "^2.2.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.0.1",
     "mysql": "^2.13.0",
     "sequelize": "^3.30.2",
@@ -39,6 +41,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^2.1.1",
     "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
     "supertest": "^3.0.0"
   }
 }
