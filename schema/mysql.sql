@@ -7,14 +7,44 @@ CREATE TABLE `team` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `participant` (
+CREATE TABLE `participants` (
   `id` INT NOT NULL,
   `fbid` VARCHAR(255) NOT NULL UNIQUE,
   `team` INT NOT NULL,
+  `event` INT NOT NULL,
+  `datasource` INT NOT NULL,
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `record` (
+CREATE TABLE `achievements` (
+  `id` INT NOT NULL,
+  `team` INT NOT NULL,
+  `achievement` INT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `achievement` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+  `distance` INT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `donors` (
+  `id` INT NOT NULL,
+  `donor` INT NOT NULL,
+  `participant` INT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `donor` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+  `luminate_id` VARCHAR(255) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `records` (
   `id` INT NOT NULL,
   `participant` INT NOT NULL,
   `date` DATE NOT NULL,
@@ -23,50 +53,66 @@ CREATE TABLE `record` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `source` (
+CREATE TABLE `sources` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `events` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `start_date` DATE NOT NULL,
+  `end_date` DATE NOT NULL,
+  `locality` INT NOT NULL,
+  `team_limit` INT NOT NULL,
+  `team_building_start` DATE NOT NULL,
+  `team_building_end` DATE NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `localities` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `sponsors` (
+  `id` INT NOT NULL,
+  `sponsor` INT NOT NULL,
+  `participant` INT NOT NULL,
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `sponsor` (
   `id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL UNIQUE,
+  `luminate_id` VARCHAR(255) NOT NULL UNIQUE,
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `sponsorship` (
-  `id` INT NOT NULL,
-  `participant` INT NOT NULL,
-  `sponsor` INT NOT NULL,
-  `donation` INT NOT NULL,
-  PRIMARY KEY (`id`)
-);
+ALTER TABLE `participants` ADD CONSTRAINT `participants_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
-CREATE TABLE `destinations` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(255) NOT NULL UNIQUE,
-  `distance` INT NOT NULL,
-  PRIMARY KEY (`id`)
-);
+ALTER TABLE `participants` ADD CONSTRAINT `participants_fk1` FOREIGN KEY (`event`) REFERENCES `events`(`id`);
 
-CREATE TABLE `accomplishment` (
-  `id` INT NOT NULL,
-  `team` INT NOT NULL,
-  `destination` INT NOT NULL,
-  PRIMARY KEY (`id`)
-);
+ALTER TABLE `participants` ADD CONSTRAINT `participants_fk2` FOREIGN KEY (`datasource`) REFERENCES `sources`(`id`);
 
-ALTER TABLE `participant` ADD CONSTRAINT `participant_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
+ALTER TABLE `achievements` ADD CONSTRAINT `achievements_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
-ALTER TABLE `record` ADD CONSTRAINT `record_fk0` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
+ALTER TABLE `achievements` ADD CONSTRAINT `achievements_fk1` FOREIGN KEY (`achievement`) REFERENCES `achievement`(`id`);
 
-ALTER TABLE `record` ADD CONSTRAINT `record_fk1` FOREIGN KEY (`source`) REFERENCES `source`(`id`);
+ALTER TABLE `donors` ADD CONSTRAINT `donors_fk0` FOREIGN KEY (`donor`) REFERENCES `donor`(`id`);
 
-ALTER TABLE `sponsorship` ADD CONSTRAINT `sponsorship_fk0` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
+ALTER TABLE `donors` ADD CONSTRAINT `donors_fk1` FOREIGN KEY (`participant`) REFERENCES `participants`(`id`);
 
-ALTER TABLE `sponsorship` ADD CONSTRAINT `sponsorship_fk1` FOREIGN KEY (`sponsor`) REFERENCES `sponsor`(`id`);
+ALTER TABLE `records` ADD CONSTRAINT `records_fk0` FOREIGN KEY (`participant`) REFERENCES `participants`(`id`);
 
-ALTER TABLE `accomplishment` ADD CONSTRAINT `accomplishment_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
+ALTER TABLE `records` ADD CONSTRAINT `records_fk1` FOREIGN KEY (`source`) REFERENCES `sources`(`id`);
 
-ALTER TABLE `accomplishment` ADD CONSTRAINT `accomplishment_fk1` FOREIGN KEY (`destination`) REFERENCES `destinations`(`id`);
+ALTER TABLE `events` ADD CONSTRAINT `events_fk0` FOREIGN KEY (`locality`) REFERENCES `localities`(`id`);
+
+ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk0` FOREIGN KEY (`sponsor`) REFERENCES `sponsor`(`id`);
+
+ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk1` FOREIGN KEY (`participant`) REFERENCES `participants`(`id`);
+
