@@ -13,6 +13,7 @@ CREATE TABLE `participants` (
   `team` INT NOT NULL,
   `event` INT NOT NULL,
   `datasource` INT NOT NULL,
+  `preferred_cause` INT,
   PRIMARY KEY (`id`)
 );
 
@@ -104,6 +105,8 @@ ALTER TABLE `participants` ADD CONSTRAINT `participants_fk0` FOREIGN KEY (`team`
 ALTER TABLE `participants` ADD CONSTRAINT `participants_fk1` FOREIGN KEY (`event`) REFERENCES `events`(`id`);
 
 ALTER TABLE `participants` ADD CONSTRAINT `participants_fk2` FOREIGN KEY (`datasource`) REFERENCES `sources`(`id`);
+
+ALTER TABLE `participants` ADD CONSTRAINT `participants_fk3` FOREIGN KEY (`preferred_cause`) REFERENCES `causes`(`id`);
 
 ALTER TABLE `achievements` ADD CONSTRAINT `achievements_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
