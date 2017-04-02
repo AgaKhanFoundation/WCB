@@ -69,6 +69,7 @@ CREATE TABLE `events` (
   `team_limit` INT NOT NULL,
   `team_building_start` DATE NOT NULL,
   `team_building_end` DATE NOT NULL,
+  `cause` INT NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -92,6 +93,12 @@ CREATE TABLE `sponsor` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `causes` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(255) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)
+);
+
 ALTER TABLE `participants` ADD CONSTRAINT `participants_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
 ALTER TABLE `participants` ADD CONSTRAINT `participants_fk1` FOREIGN KEY (`event`) REFERENCES `events`(`id`);
@@ -111,6 +118,8 @@ ALTER TABLE `records` ADD CONSTRAINT `records_fk0` FOREIGN KEY (`participant`) R
 ALTER TABLE `records` ADD CONSTRAINT `records_fk1` FOREIGN KEY (`source`) REFERENCES `sources`(`id`);
 
 ALTER TABLE `events` ADD CONSTRAINT `events_fk0` FOREIGN KEY (`locality`) REFERENCES `localities`(`id`);
+
+ALTER TABLE `events` ADD CONSTRAINT `events_fk1` FOREIGN KEY (`cause`) REFERENCES `causes`(`id`);
 
 ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk0` FOREIGN KEY (`sponsor`) REFERENCES `sponsor`(`id`);
 
