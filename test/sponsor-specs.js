@@ -13,7 +13,6 @@ chai.use(chaiAsPromised)
 const koaRequest = request(http.createServer(server.callback()))
 
 describe('sponsor', () => {
-
   context('GET /sponsor', () => {
     before(() => {
       return model.db.sequelize.sync({force: true})
@@ -27,10 +26,10 @@ describe('sponsor', () => {
         })
     })
     it('should return sponsors', async () => {
-      let sponsor1 = await model.db.sponsor.create({"name":"Kaiser NC",
-        "luminate_id": "001"})
-      let sponsor2 = await model.db.sponsor.create({"name":"Sutter Health",
-        "luminate_id": "002"})
+      let sponsor1 = await model.db.sponsor.create({'name': 'Kaiser NC',
+        'luminate_id': '001'})
+      let sponsor2 = await model.db.sponsor.create({'name': 'Sutter Health',
+        'luminate_id': '002'})
       await koaRequest
         .get('/sponsor')
         .expect(200)
@@ -53,8 +52,8 @@ describe('sponsor', () => {
         .expect(204)
     })
     it('should return sponsor with id=id', async () => {
-      let sponsor = await model.db.sponsor.create({"name":"Kaiser NC",
-        "luminate_id": "001"})
+      let sponsor = await model.db.sponsor.create({'name': 'Kaiser NC',
+        'luminate_id': '001'})
       await koaRequest
         .get('/sponsor/' + sponsor.id)
         .expect(200)
@@ -70,7 +69,7 @@ describe('sponsor', () => {
       return model.db.sequelize.sync({force: true})
     })
     it('should create sponsor with name=name and luminate_id=luminate_id', async () => {
-      let body = {"name":"Blue Shield","luminate_id": "003"}
+      let body = {'name': 'Blue Shield', 'luminate_id': '003'}
       await koaRequest
         .post('/sponsor')
         .send(body)
@@ -81,18 +80,18 @@ describe('sponsor', () => {
         })
     })
     it('should return 400 if sponsor name conflict', async () => {
-      let sponsor1 = {"name":"Kaiser NC", "luminate_id": "001"}
-      let duplicateNameReq = {"name":"Kaiser NC", "luminate_id": "002"}
-      let sponsor = await model.db.sponsor.create(sponsor1)
+      let sponsor1 = {'name': 'Kaiser NC', 'luminate_id': '001'}
+      let duplicateNameReq = {'name': 'Kaiser NC', 'luminate_id': '002'}
+      await model.db.sponsor.create(sponsor1)
       await koaRequest
         .post('/sponsor')
         .send(duplicateNameReq)
         .expect(400)
     })
     it('should return 400 if sponsor luminate id conflict', async () => {
-      let sponsor1 = {"name":"Cigna", "luminate_id": "004"}
-      let duplicateLuminateReq = {"name":"Sutter Health", "luminate_id": "004"}
-      let sponsor = await model.db.sponsor.create(sponsor1)
+      let sponsor1 = {'name': 'Cigna', 'luminate_id': '004'}
+      let duplicateLuminateReq = {'name': 'Sutter Health', 'luminate_id': '004'}
+      await model.db.sponsor.create(sponsor1)
       await koaRequest
         .post('/sponsor')
         .send(duplicateLuminateReq)
@@ -105,8 +104,8 @@ describe('sponsor', () => {
       return model.db.sequelize.sync({force: true})
     })
     it('should delete sponsor with id=id', async () => {
-      let sponsor = await model.db.sponsor.create({"name":"Kaiser NC",
-        "luminate_id": "001"})
+      let sponsor = await model.db.sponsor.create({'name': 'Kaiser NC',
+        'luminate_id': '001'})
       await koaRequest
         .del('/sponsor/' + sponsor.id)
         .expect(204)
