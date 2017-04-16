@@ -1,8 +1,6 @@
 {
-  "database": "wcb",
+  "db": "wcb",
   "host": "localhost",
   "dialect": "mysql",
-  "dialectOptions": {
-    "socketPath": "/cloudsql/akf-wcb:us-central1:akf-wcb-staging"
-  }
+  "port": 3306
 }
