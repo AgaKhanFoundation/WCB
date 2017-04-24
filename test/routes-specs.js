@@ -17,7 +17,7 @@ describe('routes', () => {
     it('should respond 200', async () => {
       await koaRequest
         .get('/')
-        .expect(200, 'ok')
+        .expect(200, {'status': 'OK'})
     })
   })
 
