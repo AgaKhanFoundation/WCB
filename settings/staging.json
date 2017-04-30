@@ -1,0 +1,6 @@
+{
+  "db": "wcb",
+  "host": "localhost",
+  "dialect": "mysql",
+  "port": 3306
+}
