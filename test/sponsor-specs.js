@@ -1,16 +1,7 @@
 /* eslint-env mocha */
 
-const chai = require('chai')
-const chaiAsPromised = require('chai-as-promised')
-const request = require('supertest')
-const http = require('http')
-const server = require('../lib/server.js')
-const model = require('../lib/models')
-
-chai.should()
-chai.use(chaiAsPromised)
-
-const koaRequest = request(http.createServer(server.callback()))
+const koaRequest = require('./routes-specs').koaRequest
+const model = require('./routes-specs').model
 
 describe('sponsor', () => {
   context('GET /sponsor', () => {
