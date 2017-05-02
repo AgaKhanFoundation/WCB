@@ -3,11 +3,12 @@
 const koaRequest = require('./routes-specs').koaRequest
 const model = require('./routes-specs').model
 
+beforeEach(function syncDB () {
+  return model.db.sequelize.sync({force: true})
+})
+
 describe('team', () => {
   context('GET /teams', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should return teams', async () => {
       let team1 = await model.db.team.create({name: 'team1'})
       let team2 = await model.db.team.create({name: 'team2'})
@@ -22,9 +23,6 @@ describe('team', () => {
   })
 
   context('GET /teams/:id', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should return 204 if no team with id=id', async () => {
       await koaRequest
         .get('/teams/1')
@@ -42,9 +40,6 @@ describe('team', () => {
   })
 
   context('POST /teams', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should create team with name=name', async () => {
       let name = 'team1'
       await koaRequest
@@ -65,9 +60,6 @@ describe('team', () => {
   })
 
   context('PATCH /teams/:id', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should change team name', async () => {
       let team = await model.db.team.create({name: 'team1'})
       await koaRequest
@@ -86,9 +78,6 @@ describe('team', () => {
   })
 
   context('DELETE /teams/:id', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should delete team with id=id', async () => {
       let team = await model.db.team.create({name: 'team1'})
       await koaRequest
