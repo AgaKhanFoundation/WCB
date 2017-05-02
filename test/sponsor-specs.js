@@ -3,11 +3,12 @@
 const koaRequest = require('./routes-specs').koaRequest
 const model = require('./routes-specs').model
 
+beforeEach(function syncDB () {
+  return model.db.sequelize.sync({force: true})
+})
+
 describe('sponsor', () => {
   context('GET /sponsor', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should return empty array if no sponsors', async () => {
       await koaRequest
         .get('/sponsor')
@@ -34,9 +35,6 @@ describe('sponsor', () => {
   })
 
   context('GET /sponsor/:id', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should return 204 if no sponsor with id=id', async () => {
       await koaRequest
         .get('/sponsor/1')
@@ -56,9 +54,6 @@ describe('sponsor', () => {
   })
 
   context('POST /sponsor', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should create sponsor with name=name and luminate_id=luminate_id', async () => {
       let body = {'name': 'Blue Shield', 'luminate_id': '003'}
       await koaRequest
@@ -91,9 +86,6 @@ describe('sponsor', () => {
   })
 
   context('DELETE /sponsor/:id', () => {
-    before(() => {
-      return model.db.sequelize.sync({force: true})
-    })
     it('should delete sponsor with id=id', async () => {
       let sponsor = await model.db.sponsor.create({'name': 'Kaiser NC',
         'luminate_id': '001'})
