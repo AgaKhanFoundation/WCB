@@ -11,7 +11,7 @@ CREATE TABLE `participants` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fbid` VARCHAR(255) NOT NULL UNIQUE,
   `team` INT,
-  `event` INT,
+  `event_id` INT,
   `datasource` INT,
   `preferred_cause` INT,
   PRIMARY KEY (`id`)
@@ -102,7 +102,7 @@ CREATE TABLE `cause` (
 
 ALTER TABLE `participants` ADD CONSTRAINT `participants_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
-ALTER TABLE `participants` ADD CONSTRAINT `participants_fk1` FOREIGN KEY (`event`) REFERENCES `events`(`id`);
+ALTER TABLE `participants` ADD CONSTRAINT `participants_fk1` FOREIGN KEY (`event_id`) REFERENCES `events`(`id`);
 
 ALTER TABLE `participants` ADD CONSTRAINT `participants_fk2` FOREIGN KEY (`datasource`) REFERENCES `sources`(`id`);
 
