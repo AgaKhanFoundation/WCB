@@ -8,13 +8,13 @@ beforeEach(function syncDB () {
 })
 
 describe('participants', () => {
-  context('GET /participants/:id', () => {
-    it('should return 204 if no participant with fbid=id', async () => {
+  context('GET /participants/:fbid', () => {
+    it('should return 204 if no participant with fbid=fbid', async () => {
       await koaRequest
         .get('/participants/1')
         .expect(204)
     })
-    it('should return participant with fbid=id', async () => {
+    it('should return participant with fbid=fbid', async () => {
       let participant = await model.db.participants.create({fbid: 'p1'})
       await koaRequest
         .get('/participants/' + participant.fbid)
@@ -26,11 +26,11 @@ describe('participants', () => {
   })
 
   context('POST /participants', () => {
-    it('should create participant with fbid=id', async () => {
+    it('should create participant with fbid=fbid', async () => {
       let fbid = 'p1'
       await koaRequest
         .post('/participants')
-        .send({id: fbid})
+        .send({fbid})
         .expect(201)
         .then(response => {
           response.body.fbid.should.equal(fbid)
@@ -41,19 +41,19 @@ describe('participants', () => {
       let p2 = await model.db.participants.create({fbid})
       await koaRequest
         .post('/participants')
-        .send({id: p2.fbid})
+        .send({fbid})
         .expect(409, `Participant with fbid="${p2.fbid}" already exists!`)
     })
   })
 
-  context('DELETE /participants/:id', () => {
-    it('should delete participant with fbid=id', async () => {
+  context('DELETE /participants/:fbid', () => {
+    it('should delete participant with fbid=fbid', async () => {
       let participant = await model.db.participants.create({fbid: 'p1'})
       await koaRequest
         .del('/participants/' + participant.fbid)
         .expect(204)
     })
-    it('should return 400 if no participant with fbid=id', async () => {
+    it('should return 400 if no participant with fbid=fbid', async () => {
       await koaRequest
         .del('/participants/' + 0)
         .expect(400)
