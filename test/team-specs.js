@@ -86,7 +86,7 @@ describe('team', () => {
     })
     it('should return 400 if no team with id=id', async () => {
       await koaRequest
-        .patch('/teams/' + 0)
+        .del('/teams/' + 0)
         .expect(400)
     })
   })
