@@ -42,7 +42,7 @@ describe('participants', () => {
       await koaRequest
         .post('/participants')
         .send({fbid})
-        .expect(409, `Participant with fbid="${p2.fbid}" already exists!`)
+        .expect(409, {'error': {'code': 409, 'message': `participant with fbid="${p2.fbid}" already exists`}})
     })
   })
 
