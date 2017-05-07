@@ -55,7 +55,10 @@ describe('team', () => {
       await koaRequest
         .post('/teams')
         .send({name: team2.name})
-        .expect(409, `Team named "${team2.name}" already exists!`)
+        .expect(409, {'error': {
+          'code': 409,
+          'message': `team named "${team2.name}" already exists`
+        }})
     })
   })
 
