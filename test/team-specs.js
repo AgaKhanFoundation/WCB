@@ -76,7 +76,10 @@ describe('team', () => {
       await koaRequest
         .patch('/teams/' + team2.id)
         .send({name: team3.name})
-        .expect(400, 'Validation error')
+        .expect(400, {'error': {
+          'code': 400,
+          'message': 'Validation error'
+        }})
     })
   })
 
