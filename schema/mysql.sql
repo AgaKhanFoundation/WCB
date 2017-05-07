@@ -127,3 +127,5 @@ ALTER TABLE `events` ADD CONSTRAINT `events_fk1` FOREIGN KEY (`cause`) REFERENCE
 ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk0` FOREIGN KEY (`sponsor`) REFERENCES `sponsor`(`id`);
 
 ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk1` FOREIGN KEY (`participant`) REFERENCES `participants`(`id`);
+
+CREATE UNIQUE INDEX `achievementsIndex` ON `achievements` (`team`, `achievement`);
