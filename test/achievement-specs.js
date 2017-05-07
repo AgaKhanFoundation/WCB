@@ -60,7 +60,10 @@ describe('achievement', () => {
       await koaRequest
         .post('/achievement')
         .send({name: a2.name, distance: a2.distance})
-        .expect(409, `Achievement named "${a2.name}" already exists!`)
+        .expect(409, {'error': {
+          'code': 409,
+          'message': `achievement named "${a2.name}" already exists`
+        }})
     })
   })
 
@@ -78,7 +81,10 @@ describe('achievement', () => {
       await koaRequest
         .patch('/achievement/' + a2.id)
         .send({name: a3.name})
-        .expect(400, 'Validation error')
+        .expect(400, {'error': {
+          'code': 400,
+          'message': `Validation error`
+        }})
     })
   })
 
