@@ -49,14 +49,24 @@ describe('participants', () => {
     })
   })
 
-  context('PATCH /participants/:id' () => {
-    it('should join a team', async () => {
-      let participant = await model.db.participants.create([fbid: 'fb1d'})
-      let team = await models.db.team.create({name: 'team'})
+  context('PATCH /participants/:fbid', () => {
+    it('should set team for participant with fbid=fbid', async () => {
+      let p1 = await model.db.participants.create({fbid: 'p1'})
+      let t1 = await model.db.team.create({name: 't1'})
       await koaRequest
-        .patch('/participants/' + participants.fbid)
-        .send({team: team.id})
+        .patch('/participants/' + p1.fbid)
+        .send({team: t1.id})
         .expect(200)
+    })
+    it('should return 400 if team does not exist', async () => {
+      let p1 = await model.db.participants.create({fbid: 'p1'})
+      await koaRequest
+        .patch('/participants/' + p1.fbid)
+        .send({team: 1})
+        .expect(400, {'error': {
+          'code': 400,
+          'message': 'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'
+        }})
     })
   })
 
