@@ -49,6 +49,17 @@ describe('participants', () => {
     })
   })
 
+  context('PATCH /participants/:id' () => {
+    it('should join a team', async () => {
+      let participant = await model.db.participants.create([fbid: 'fb1d'})
+      let team = await models.db.team.create({name: 'team'})
+      await koaRequest
+        .patch('/participants/' + participants.fbid)
+        .send({team: team.id})
+        .expect(200)
+    })
+  })
+
   context('DELETE /participants/:fbid', () => {
     it('should delete participant with fbid=fbid', async () => {
       let participant = await model.db.participants.create({fbid: 'p1'})
