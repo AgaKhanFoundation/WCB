@@ -75,6 +75,12 @@ describe('achievement', () => {
         .send({name: 'Paris', distance: 200})
         .expect(200, [1])
     })
+    it('should return 400 if no achievement with id=id', async () => {
+      await koaRequest
+        .patch('/achievement/' + 1)
+        .send({name: 'a2'})
+        .expect(400, [0])
+    })
     it('should return 400 if achievement name conflict', async () => {
       let a2 = await model.db.achievement.create({name: 'Paris', distance: 200})
       let a3 = await model.db.achievement.create({name: 'Amsterdam', distance: 300})

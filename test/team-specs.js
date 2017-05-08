@@ -70,6 +70,12 @@ describe('team', () => {
         .send({name: 'firstTeam'})
         .expect(200, [1])
     })
+    it('should return 400 if no team with id=id', async () => {
+      await koaRequest
+        .patch('/teams/' + 1)
+        .send({name: 't2'})
+        .expect(400, [0])
+    })
     it('should return 400 if team name conflict', async () => {
       let team2 = await model.db.team.create({name: 'team2'})
       let team3 = await model.db.team.create({name: 'team3'})

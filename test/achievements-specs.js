@@ -93,6 +93,12 @@ describe('achievements', () => {
         .send({team: t2.id, achievement: a2.id})
         .expect(200, [1])
     })
+    it('should return 400 if no achievements with id=id', async () => {
+      await koaRequest
+        .patch('/achievements/' + 1)
+        .send({team: 1})
+        .expect(400, [0])
+    })
     it('should return 400 if achievements\' team and achievement conflict', async () => {
       let t1 = await model.db.team.create({name: 'team1'})
       let t2 = await model.db.team.create({name: 'team2'})
