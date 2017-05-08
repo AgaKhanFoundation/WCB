@@ -22,7 +22,7 @@ function main() {
     delete)
     ;;
     *)
-      echo >&2 unknown operation ${2}
+      echo >&2 unknown operation \`${2}\`
       return ${EXIT_FAILURE}
     ;;
     esac
@@ -35,9 +35,13 @@ function main() {
     delete)
     ;;
     *)
-      echo >&2 unknown operation ${2}
+      echo >&2 unknown operation \`${2}\`
       return ${EXIT_FAILURE}
     esac
+  ;;
+  *)
+    echo >&2 unknown entity \`${1}\`
+    return ${EXIT_FAILURE}
   ;;
   esac
   echo
