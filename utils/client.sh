@@ -28,6 +28,7 @@ function main() {
   participant)
     case "${2}" in
     create)
+      precondition "${#} -gt 2" "must have participant Facebook ID to create participant"
       pp $(_curl POST participants "{\"fbid\":\"${3}\"}")
     ;;
     delete)
@@ -47,6 +48,7 @@ function main() {
   team)
     case "${2}" in
     create)
+      precondition "${#} -gt 2" "must have team name to create team"
       pp $(_curl POST teams "{\"name\":\"${3}\"}")
     ;;
     delete)
