@@ -35,7 +35,8 @@ function main() {
       _curl DELETE participants/${3}
     ;;
     query)
-      pp $(_curl GET participants${3:+/${3}})
+      precondition "${#} -gt 2" "cannot query all participants"
+      pp $(_curl GET participants/${3})
     ;;
     *)
       echo >&2 unknown operation \`${2}\`
