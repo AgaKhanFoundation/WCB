@@ -6,6 +6,13 @@
 : ${SCHEME:=https}
 : ${SERVER:=akf-causes.subshell.org}
 
+function precondition() {
+  if ! test ${1} ; then
+    echo >&2 assertion failed: ${2}
+    exit ${EXIT_FAILURE}
+  fi
+}
+
 function _curl() {
   local method=${1} ; shift
   local endpoint=${1} ; shift
@@ -20,6 +27,7 @@ function main() {
       _curl POST participants "{\"fbid\":\"${3}\"}"
     ;;
     delete)
+      precondition "${#} -gt 2" "must have participant Facebook ID to delete participant"
       _curl DELETE participants/${3}
     ;;
     query)
@@ -37,6 +45,7 @@ function main() {
       _curl POST teams "{\"name\":\"${3}\"}"
     ;;
     delete)
+      precondition "${#} -gt 2" "must have team-id to delete team"
       _curl DELETE teams/${3}
     ;;
     query)
