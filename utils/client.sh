@@ -21,6 +21,9 @@ function main() {
     ;;
     delete)
     ;;
+    query)
+      _curl GET participants${3:+/${3}}
+    ;;
     *)
       echo >&2 unknown operation \`${2}\`
       return ${EXIT_FAILURE}
@@ -33,6 +36,9 @@ function main() {
       _curl POST teams "{\"name\":\"${3}\"}"
     ;;
     delete)
+    ;;
+    query)
+      _curl GET teams${3:+/${3}}
     ;;
     *)
       echo >&2 unknown operation \`${2}\`
