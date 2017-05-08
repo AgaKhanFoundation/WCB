@@ -16,7 +16,7 @@ function precondition() {
 function _curl() {
   local method=${1} ; shift
   local endpoint=${1} ; shift
-  curl "${SCHEME}://${SERVER}/${endpoint}" -H "Content-Type: application/json" -X ${method} -d "${*}"
+  curl "${SCHEME}://${SERVER}/${endpoint}" --header "Content-Type: application/json" --request ${method} --data "${*}"
 }
 
 function main() {
