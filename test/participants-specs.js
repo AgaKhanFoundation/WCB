@@ -58,6 +58,12 @@ describe('participants', () => {
         .send({team: t1.id})
         .expect(200)
     })
+    it('should return 400 if no participant with id=id', async () => {
+      await koaRequest
+        .patch('/participants/' + 1)
+        .send({team: 1})
+        .expect(400, [0])
+    })
     it('should return 400 if team does not exist', async () => {
       let p1 = await model.db.participants.create({fbid: 'p1'})
       await koaRequest
