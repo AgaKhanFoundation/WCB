@@ -20,6 +20,7 @@ function main() {
       _curl POST participants "{\"fbid\":\"${3}\"}"
     ;;
     delete)
+      _curl DELETE participants/${3}
     ;;
     query)
       _curl GET participants${3:+/${3}}
@@ -36,6 +37,7 @@ function main() {
       _curl POST teams "{\"name\":\"${3}\"}"
     ;;
     delete)
+      _curl DELETE teams/${3}
     ;;
     query)
       _curl GET teams${3:+/${3}}
