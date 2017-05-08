@@ -6,6 +6,10 @@
 : ${SCHEME:=https}
 : ${SERVER:=akf-causes.subshell.org}
 
+function pp() {
+  python -c 'import json, sys; data = json.load(sys.stdin); print json.dumps(data, indent=2)' <<< ${*}
+}
+
 function precondition() {
   if ! test ${1} ; then
     echo >&2 assertion failed: ${2}
@@ -24,14 +28,14 @@ function main() {
   participant)
     case "${2}" in
     create)
-      _curl POST participants "{\"fbid\":\"${3}\"}"
+      pp $(_curl POST participants "{\"fbid\":\"${3}\"}")
     ;;
     delete)
       precondition "${#} -gt 2" "must have participant Facebook ID to delete participant"
       _curl DELETE participants/${3}
     ;;
     query)
-      _curl GET participants${3:+/${3}}
+      pp $(_curl GET participants${3:+/${3}})
     ;;
     *)
       echo >&2 unknown operation \`${2}\`
@@ -42,14 +46,14 @@ function main() {
   team)
     case "${2}" in
     create)
-      _curl POST teams "{\"name\":\"${3}\"}"
+      pp $(_curl POST teams "{\"name\":\"${3}\"}")
     ;;
     delete)
       precondition "${#} -gt 2" "must have team-id to delete team"
       _curl DELETE teams/${3}
     ;;
     query)
-      _curl GET teams${3:+/${3}}
+      pp $(_curl GET teams${3:+/${3}})
     ;;
     *)
       echo >&2 unknown operation \`${2}\`
@@ -61,7 +65,6 @@ function main() {
     return ${EXIT_FAILURE}
   ;;
   esac
-  echo
 }
 
 main "${@}"
