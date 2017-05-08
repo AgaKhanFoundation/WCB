@@ -26,24 +26,36 @@ function _curl() {
 function main() {
   case "${1}" in
   participant)
-    case "${2}" in
-    create)
-      precondition "${#} -gt 2" "must have participant Facebook ID to create participant"
-      pp $(_curl POST participants "{\"fbid\":\"${3}\"}")
-    ;;
-    delete)
-      precondition "${#} -gt 2" "must have participant Facebook ID to delete participant"
-      _curl DELETE participants/${3}
-    ;;
-    query)
-      precondition "${#} -gt 2" "cannot query all participants"
-      pp $(_curl GET participants/${3})
-    ;;
-    *)
-      echo >&2 unknown operation \`${2}\`
-      return ${EXIT_FAILURE}
-    ;;
-    esac
+    if [[ ${2} =~ [0-9]+ ]] ; then
+      case "${3}" in
+      join-team)
+        precondition "${#} -gt 3" "must have team id to join a team"
+        pp $(_curl PATCH participants/${2} "{\"team\":\"${4}\"}")
+      ;;
+      leave-team)
+        pp $(_curl PATCH participants/${2} "{\"team\":null}")
+      ;;
+      esac
+    else
+      case "${2}" in
+      create)
+        precondition "${#} -gt 2" "must have participant Facebook ID to create participant"
+        pp $(_curl POST participants "{\"fbid\":\"${3}\"}")
+      ;;
+      delete)
+        precondition "${#} -gt 2" "must have participant Facebook ID to delete participant"
+        _curl DELETE participants/${3}
+      ;;
+      query)
+        precondition "${#} -gt 2" "cannot query all participants"
+        pp $(_curl GET participants/${3})
+      ;;
+      *)
+        echo >&2 unknown operation \`${2}\`
+        return ${EXIT_FAILURE}
+      ;;
+      esac
+    fi
   ;;
   team)
     case "${2}" in
