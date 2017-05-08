@@ -6,10 +6,10 @@
 : ${SCHEME:=https}
 : ${SERVER:=akf-causes.subshell.org}
 
-function post() {
-  local endpoint=${1}
-  shift
-  curl "${SCHEME}://${SERVER}/${endpoint}" -H "Content-Type: application/json" -X POST -d "${*}"
+function _curl() {
+  local method=${1} ; shift
+  local endpoint=${1} ; shift
+  curl "${SCHEME}://${SERVER}/${endpoint}" -H "Content-Type: application/json" -X ${method} -d "${*}"
 }
 
 function main() {
@@ -17,7 +17,7 @@ function main() {
   participant)
     case "${2}" in
     create)
-      post participants "{\"fbid\":\"${3}\"}"
+      _curl POST participants "{\"fbid\":\"${3}\"}"
     ;;
     delete)
     ;;
@@ -30,7 +30,7 @@ function main() {
   team)
     case "${2}" in
     create)
-      post teams "{\"name\":\"${3}\"}"
+      _curl POST teams "{\"name\":\"${3}\"}"
     ;;
     delete)
     ;;
