@@ -7,7 +7,7 @@ CREATE TABLE `team` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `participants` (
+CREATE TABLE `participant` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fbid` VARCHAR(255) NOT NULL UNIQUE,
   `team` INT,
@@ -100,13 +100,13 @@ CREATE TABLE `cause` (
   PRIMARY KEY (`id`)
 );
 
-ALTER TABLE `participants` ADD CONSTRAINT `participants_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
+ALTER TABLE `participant` ADD CONSTRAINT `participant_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
-ALTER TABLE `participants` ADD CONSTRAINT `participants_fk1` FOREIGN KEY (`event_id`) REFERENCES `events`(`id`);
+ALTER TABLE `participant` ADD CONSTRAINT `participant_fk1` FOREIGN KEY (`event_id`) REFERENCES `events`(`id`);
 
-ALTER TABLE `participants` ADD CONSTRAINT `participants_fk2` FOREIGN KEY (`datasource`) REFERENCES `sources`(`id`);
+ALTER TABLE `participant` ADD CONSTRAINT `participant_fk2` FOREIGN KEY (`datasource`) REFERENCES `sources`(`id`);
 
-ALTER TABLE `participants` ADD CONSTRAINT `participants_fk3` FOREIGN KEY (`preferred_cause`) REFERENCES `cause`(`id`);
+ALTER TABLE `participant` ADD CONSTRAINT `participant_fk3` FOREIGN KEY (`preferred_cause`) REFERENCES `cause`(`id`);
 
 ALTER TABLE `achievements` ADD CONSTRAINT `achievements_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
@@ -114,9 +114,9 @@ ALTER TABLE `achievements` ADD CONSTRAINT `achievements_fk1` FOREIGN KEY (`achie
 
 ALTER TABLE `donors` ADD CONSTRAINT `donors_fk0` FOREIGN KEY (`donor`) REFERENCES `donor`(`id`);
 
-ALTER TABLE `donors` ADD CONSTRAINT `donors_fk1` FOREIGN KEY (`participant`) REFERENCES `participants`(`id`);
+ALTER TABLE `donors` ADD CONSTRAINT `donors_fk1` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
 
-ALTER TABLE `records` ADD CONSTRAINT `records_fk0` FOREIGN KEY (`participant`) REFERENCES `participants`(`id`);
+ALTER TABLE `records` ADD CONSTRAINT `records_fk0` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
 
 ALTER TABLE `records` ADD CONSTRAINT `records_fk1` FOREIGN KEY (`source`) REFERENCES `sources`(`id`);
 
@@ -126,6 +126,6 @@ ALTER TABLE `events` ADD CONSTRAINT `events_fk1` FOREIGN KEY (`cause`) REFERENCE
 
 ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk0` FOREIGN KEY (`sponsor`) REFERENCES `sponsor`(`id`);
 
-ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk1` FOREIGN KEY (`participant`) REFERENCES `participants`(`id`);
+ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk1` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
 
 CREATE UNIQUE INDEX `achievementsIndex` ON `achievements` (`team`, `achievement`);

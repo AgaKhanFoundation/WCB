@@ -15,7 +15,7 @@ describe('participants', () => {
         .expect(204)
     })
     it('should return participant with fbid=fbid', async () => {
-      let participant = await model.db.participants.create({fbid: 'p1'})
+      let participant = await model.db.participant.create({fbid: 'p1'})
       await koaRequest
         .get('/participants/' + participant.fbid)
         .expect(200)
@@ -38,7 +38,7 @@ describe('participants', () => {
     })
     it('should return 409 if participant fbid conflict', async () => {
       let fbid = 'p2'
-      let p2 = await model.db.participants.create({fbid})
+      let p2 = await model.db.participant.create({fbid})
       await koaRequest
         .post('/participants')
         .send({fbid})
@@ -51,7 +51,7 @@ describe('participants', () => {
 
   context('PATCH /participants/:fbid', () => {
     it('should set team for participant with fbid=fbid', async () => {
-      let p1 = await model.db.participants.create({fbid: 'p1'})
+      let p1 = await model.db.participant.create({fbid: 'p1'})
       let t1 = await model.db.team.create({name: 't1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
@@ -65,7 +65,7 @@ describe('participants', () => {
         .expect(400, [0])
     })
     it('should return 400 if team does not exist', async () => {
-      let p1 = await model.db.participants.create({fbid: 'p1'})
+      let p1 = await model.db.participant.create({fbid: 'p1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
         .send({team: 1})
@@ -78,7 +78,7 @@ describe('participants', () => {
 
   context('DELETE /participants/:fbid', () => {
     it('should delete participant with fbid=fbid', async () => {
-      let participant = await model.db.participants.create({fbid: 'p1'})
+      let participant = await model.db.participant.create({fbid: 'p1'})
       await koaRequest
         .del('/participants/' + participant.fbid)
         .expect(204)
