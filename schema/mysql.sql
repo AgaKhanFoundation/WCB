@@ -60,7 +60,7 @@ CREATE TABLE `source` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `events` (
+CREATE TABLE `event` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `description` TEXT NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE `cause` (
 
 ALTER TABLE `participant` ADD CONSTRAINT `participant_fk0` FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 
-ALTER TABLE `participant` ADD CONSTRAINT `participant_fk1` FOREIGN KEY (`event_id`) REFERENCES `events`(`id`);
+ALTER TABLE `participant` ADD CONSTRAINT `participant_fk1` FOREIGN KEY (`event_id`) REFERENCES `event`(`id`);
 
 ALTER TABLE `participant` ADD CONSTRAINT `participant_fk2` FOREIGN KEY (`datasource`) REFERENCES `source`(`id`);
 
@@ -120,9 +120,9 @@ ALTER TABLE `record` ADD CONSTRAINT `record_fk0` FOREIGN KEY (`participant`) REF
 
 ALTER TABLE `record` ADD CONSTRAINT `record_fk1` FOREIGN KEY (`source`) REFERENCES `source`(`id`);
 
-ALTER TABLE `events` ADD CONSTRAINT `events_fk0` FOREIGN KEY (`locality`) REFERENCES `locality`(`id`);
+ALTER TABLE `event` ADD CONSTRAINT `event_fk0` FOREIGN KEY (`locality`) REFERENCES `locality`(`id`);
 
-ALTER TABLE `events` ADD CONSTRAINT `events_fk1` FOREIGN KEY (`cause`) REFERENCES `cause`(`id`);
+ALTER TABLE `event` ADD CONSTRAINT `event_fk1` FOREIGN KEY (`cause`) REFERENCES `cause`(`id`);
 
 ALTER TABLE `sponsors` ADD CONSTRAINT `sponsors_fk0` FOREIGN KEY (`sponsor`) REFERENCES `sponsor`(`id`);
 
