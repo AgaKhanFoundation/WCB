@@ -45,7 +45,7 @@ CREATE TABLE `donor` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `records` (
+CREATE TABLE `record` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `participant` INT NOT NULL,
   `date` DATE NOT NULL,
@@ -116,9 +116,9 @@ ALTER TABLE `donors` ADD CONSTRAINT `donors_fk0` FOREIGN KEY (`donor`) REFERENCE
 
 ALTER TABLE `donors` ADD CONSTRAINT `donors_fk1` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
 
-ALTER TABLE `records` ADD CONSTRAINT `records_fk0` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
+ALTER TABLE `record` ADD CONSTRAINT `record_fk0` FOREIGN KEY (`participant`) REFERENCES `participant`(`id`);
 
-ALTER TABLE `records` ADD CONSTRAINT `records_fk1` FOREIGN KEY (`source`) REFERENCES `source`(`id`);
+ALTER TABLE `record` ADD CONSTRAINT `record_fk1` FOREIGN KEY (`source`) REFERENCES `source`(`id`);
 
 ALTER TABLE `events` ADD CONSTRAINT `events_fk0` FOREIGN KEY (`locality`) REFERENCES `locality`(`id`);
 
