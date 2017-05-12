@@ -10,8 +10,8 @@ beforeEach(function syncDB () {
 describe('sources', () => {
   context('GET /sources', () => {
     it('should return sources', async () => {
-      let s1 = await model.db.sources.create({name: 's1'})
-      let s2 = await model.db.sources.create({name: 's2'})
+      let s1 = await model.db.source.create({name: 's1'})
+      let s2 = await model.db.source.create({name: 's2'})
       await koaRequest
         .get('/sources')
         .expect(200)
@@ -29,7 +29,7 @@ describe('sources', () => {
         .expect(204)
     })
     it('should return source with id=id', async () => {
-      let s1 = await model.db.sources.create({name: 's1'})
+      let s1 = await model.db.source.create({name: 's1'})
       await koaRequest
         .get('/sources/' + s1.id)
         .expect(200)
@@ -51,7 +51,7 @@ describe('sources', () => {
         })
     })
     it('should return 409 if source name conflict', async () => {
-      let s2 = await model.db.sources.create({name: 's2'})
+      let s2 = await model.db.source.create({name: 's2'})
       await koaRequest
         .post('/sources')
         .send({name: s2.name})
@@ -64,7 +64,7 @@ describe('sources', () => {
 
   context('PATCH /sources/:id', () => {
     it('should change source name', async () => {
-      let s1 = await model.db.sources.create({name: 's1'})
+      let s1 = await model.db.source.create({name: 's1'})
       await koaRequest
         .patch('/sources/' + s1.id)
         .send({name: 's2'})
@@ -77,8 +77,8 @@ describe('sources', () => {
         .expect(400, [0])
     })
     it('should return 400 if source name conflict', async () => {
-      let s2 = await model.db.sources.create({name: 's2'})
-      let s3 = await model.db.sources.create({name: 's3'})
+      let s2 = await model.db.source.create({name: 's2'})
+      let s3 = await model.db.source.create({name: 's3'})
       await koaRequest
         .patch('/sources/' + s2.id)
         .send({name: s3.name})
@@ -91,7 +91,7 @@ describe('sources', () => {
 
   context('DELETE /sources/:id', () => {
     it('should delete source with id=id', async () => {
-      let s1 = await model.db.sources.create({name: 's1'})
+      let s1 = await model.db.source.create({name: 's1'})
       await koaRequest
         .del('/sources/' + s1.id)
         .expect(204)
