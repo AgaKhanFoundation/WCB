@@ -7,7 +7,7 @@ beforeEach(function syncDB () {
   return model.db.sequelize.sync({force: true})
 })
 
-describe('cause', () => {
+describe('causes', () => {
   context('GET /causes', () => {
     it('should return causes', async () => {
       let c1 = await model.db.cause.create({name: 'c1'})

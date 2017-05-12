@@ -7,7 +7,7 @@ beforeEach(function syncDB () {
   return model.db.sequelize.sync({force: true})
 })
 
-describe('team', () => {
+describe('teams', () => {
   context('GET /teams', () => {
     it('should return teams', async () => {
       let team1 = await model.db.team.create({name: 'team1'})
