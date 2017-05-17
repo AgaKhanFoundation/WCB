@@ -22,6 +22,19 @@ describe('achievement', () => {
           response.body[1].distance.should.equal(a2.distance)
         })
     })
+    it('should return achievements with teams', async () => {
+      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
+      let t1 = await model.db.team.create({name: 't1'})
+      await model.db.achievements.create({team: t1.id, achievement: a1.id})
+      await koaRequest
+        .get('/achievement')
+        .expect(200)
+        .then(response => {
+          response.body[0].name.should.equal(a1.name)
+          response.body[0].distance.should.equal(a1.distance)
+          response.body[0].teams[0].name.should.equal(t1.name)
+        })
+    })
   })
 
   context('GET /achievement/:id', () => {
@@ -38,6 +51,19 @@ describe('achievement', () => {
         .then(response => {
           response.body.name.should.equal(achievement.name)
           response.body.distance.should.equal(achievement.distance)
+        })
+    })
+    it('should return achievement with id=id with teams', async () => {
+      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
+      let t1 = await model.db.team.create({name: 't1'})
+      await model.db.achievements.create({team: t1.id, achievement: a1.id})
+      await koaRequest
+        .get('/achievement/' + a1.id)
+        .expect(200)
+        .then(response => {
+          response.body.name.should.equal(a1.name)
+          response.body.distance.should.equal(a1.distance)
+          response.body.teams[0].name.should.equal(t1.name)
         })
     })
   })
