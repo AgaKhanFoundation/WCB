@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "start": "node .",
-    "start-dev": "NODE_ENV=dev nodemon .",
+    "start-dev": "NODE_ENV=development nodemon .",
     "test": "NODE_ENV=test istanbul cover --report lcovonly _mocha --recursive"
   },
   "repository": {
@@ -45,6 +45,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
+    "sequelize-cli": "^2.7.0",
     "supertest": "^3.0.0"
   }
 }
