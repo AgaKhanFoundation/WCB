@@ -1,10 +1,10 @@
 /* eslint-env mocha */
 
 const koaRequest = require('./routes-specs').koaRequest
-const model = require('./routes-specs').model
+const models = require('./routes-specs').models
 
 beforeEach(function syncDB () {
-  return model.db.sequelize.sync({force: true})
+  return models.db.sequelize.sync({force: true})
 })
 
 describe('participants', () => {
@@ -15,7 +15,7 @@ describe('participants', () => {
         .expect(204)
     })
     it('should return participant with fbid=fbid', async () => {
-      let participant = await model.db.participant.create({fbid: 'p1'})
+      let participant = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .get('/participants/' + participant.fbid)
         .expect(200)
@@ -24,10 +24,10 @@ describe('participants', () => {
         })
     })
     it('should return participant with fbid=fbid including team, participants, and achievements', async () => {
-      let t1 = await model.db.team.create({name: 't1'})
-      let p1 = await model.db.participant.create({fbid: 'p1', team_id: t1.id})
-      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
-      await model.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
+      let t1 = await models.db.team.create({name: 't1'})
+      let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
+      let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
+      await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/participants/' + p1.fbid)
         .expect(200)
@@ -55,7 +55,7 @@ describe('participants', () => {
     })
     it('should return 409 if participant fbid conflict', async () => {
       let fbid = 'p2'
-      let p2 = await model.db.participant.create({fbid})
+      let p2 = await models.db.participant.create({fbid})
       await koaRequest
         .post('/participants')
         .send({fbid})
@@ -68,8 +68,8 @@ describe('participants', () => {
 
   context('PATCH /participants/:fbid', () => {
     it('should set team for participant with fbid=fbid', async () => {
-      let p1 = await model.db.participant.create({fbid: 'p1'})
-      let t1 = await model.db.team.create({name: 't1'})
+      let p1 = await models.db.participant.create({fbid: 'p1'})
+      let t1 = await models.db.team.create({name: 't1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
         .send({team_id: t1.id})
@@ -82,7 +82,7 @@ describe('participants', () => {
         .expect(400, [0])
     })
     it('should return 400 if team does not exist', async () => {
-      let p1 = await model.db.participant.create({fbid: 'p1'})
+      let p1 = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
         .send({team_id: 1})
@@ -95,7 +95,7 @@ describe('participants', () => {
 
   context('DELETE /participants/:fbid', () => {
     it('should delete participant with fbid=fbid', async () => {
-      let participant = await model.db.participant.create({fbid: 'p1'})
+      let participant = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .del('/participants/' + participant.fbid)
         .expect(204)
