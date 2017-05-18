@@ -1,10 +1,10 @@
 /* eslint-env mocha */
 
 const koaRequest = require('./routes-specs').koaRequest
-const model = require('./routes-specs').model
+const models = require('./routes-specs').models
 
 beforeEach(function syncDB () {
-  return model.db.sequelize.sync({force: true})
+  return models.db.sequelize.sync({force: true})
 })
 
 describe('sponsor', () => {
@@ -18,9 +18,9 @@ describe('sponsor', () => {
         })
     })
     it('should return sponsors', async () => {
-      let sponsor1 = await model.db.sponsor.create({'name': 'Kaiser NC',
+      let sponsor1 = await models.db.sponsor.create({'name': 'Kaiser NC',
         'luminate_id': '001'})
-      let sponsor2 = await model.db.sponsor.create({'name': 'Sutter Health',
+      let sponsor2 = await models.db.sponsor.create({'name': 'Sutter Health',
         'luminate_id': '002'})
       await koaRequest
         .get('/sponsor')
@@ -41,7 +41,7 @@ describe('sponsor', () => {
         .expect(204)
     })
     it('should return sponsor with id=id', async () => {
-      let sponsor = await model.db.sponsor.create({'name': 'Kaiser NC',
+      let sponsor = await models.db.sponsor.create({'name': 'Kaiser NC',
         'luminate_id': '001'})
       await koaRequest
         .get('/sponsor/' + sponsor.id)
@@ -68,7 +68,7 @@ describe('sponsor', () => {
     it('should return 400 if sponsor name conflict', async () => {
       let sponsor1 = {'name': 'Kaiser NC', 'luminate_id': '001'}
       let duplicateNameReq = {'name': 'Kaiser NC', 'luminate_id': '002'}
-      await model.db.sponsor.create(sponsor1)
+      await models.db.sponsor.create(sponsor1)
       await koaRequest
         .post('/sponsor')
         .send(duplicateNameReq)
@@ -77,7 +77,7 @@ describe('sponsor', () => {
     it('should return 400 if sponsor luminate id conflict', async () => {
       let sponsor1 = {'name': 'Cigna', 'luminate_id': '004'}
       let duplicateLuminateReq = {'name': 'Sutter Health', 'luminate_id': '004'}
-      await model.db.sponsor.create(sponsor1)
+      await models.db.sponsor.create(sponsor1)
       await koaRequest
         .post('/sponsor')
         .send(duplicateLuminateReq)
@@ -87,7 +87,7 @@ describe('sponsor', () => {
 
   context('DELETE /sponsor/:id', () => {
     it('should delete sponsor with id=id', async () => {
-      let sponsor = await model.db.sponsor.create({'name': 'Kaiser NC',
+      let sponsor = await models.db.sponsor.create({'name': 'Kaiser NC',
         'luminate_id': '001'})
       await koaRequest
         .del('/sponsor/' + sponsor.id)

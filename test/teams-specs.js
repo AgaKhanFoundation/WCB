@@ -1,17 +1,17 @@
 /* eslint-env mocha */
 
 const koaRequest = require('./routes-specs').koaRequest
-const model = require('./routes-specs').model
+const models = require('./routes-specs').models
 
 beforeEach(function syncDB () {
-  return model.db.sequelize.sync({force: true})
+  return models.db.sequelize.sync({force: true})
 })
 
 describe('teams', () => {
   context('GET /teams', () => {
     it('should return teams', async () => {
-      let team1 = await model.db.team.create({name: 'team1'})
-      let team2 = await model.db.team.create({name: 'team2'})
+      let team1 = await models.db.team.create({name: 'team1'})
+      let team2 = await models.db.team.create({name: 'team2'})
       await koaRequest
         .get('/teams')
         .expect(200)
@@ -21,8 +21,8 @@ describe('teams', () => {
         })
     })
     it('should return teams with participants', async () => {
-      let t1 = await model.db.team.create({name: 't1'})
-      let p1 = await model.db.participant.create({fbid: 'p1', team_id: t1.id})
+      let t1 = await models.db.team.create({name: 't1'})
+      let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams')
         .expect(200)
@@ -32,9 +32,9 @@ describe('teams', () => {
         })
     })
     it('should return teams with achievements', async () => {
-      let t1 = await model.db.team.create({name: 't1'})
-      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
-      await model.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
+      let t1 = await models.db.team.create({name: 't1'})
+      let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
+      await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/teams')
         .expect(200)
@@ -53,7 +53,7 @@ describe('teams', () => {
         .expect(204)
     })
     it('should return team with id=id', async () => {
-      let team = await model.db.team.create({name: 'team1'})
+      let team = await models.db.team.create({name: 'team1'})
       await koaRequest
         .get('/teams/' + team.id)
         .expect(200)
@@ -62,8 +62,8 @@ describe('teams', () => {
         })
     })
     it('should return team with id=id with participants', async () => {
-      let t1 = await model.db.team.create({name: 't1'})
-      let p1 = await model.db.participant.create({fbid: 'p1', team_id: t1.id})
+      let t1 = await models.db.team.create({name: 't1'})
+      let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams/' + t1.id)
         .expect(200)
@@ -73,9 +73,9 @@ describe('teams', () => {
         })
     })
     it('should return team with id=id with achievements', async () => {
-      let t1 = await model.db.team.create({name: 't1'})
-      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
-      await model.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
+      let t1 = await models.db.team.create({name: 't1'})
+      let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
+      await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/teams/' + t1.id)
         .expect(200)
@@ -99,7 +99,7 @@ describe('teams', () => {
         })
     })
     it('should return 409 if team name conflict', async () => {
-      let team2 = await model.db.team.create({name: 'team2'})
+      let team2 = await models.db.team.create({name: 'team2'})
       await koaRequest
         .post('/teams')
         .send({name: team2.name})
@@ -112,7 +112,7 @@ describe('teams', () => {
 
   context('PATCH /teams/:id', () => {
     it('should change team name', async () => {
-      let team = await model.db.team.create({name: 'team1'})
+      let team = await models.db.team.create({name: 'team1'})
       await koaRequest
         .patch('/teams/' + team.id)
         .send({name: 'firstTeam'})
@@ -125,8 +125,8 @@ describe('teams', () => {
         .expect(400, [0])
     })
     it('should return 400 if team name conflict', async () => {
-      let team2 = await model.db.team.create({name: 'team2'})
-      let team3 = await model.db.team.create({name: 'team3'})
+      let team2 = await models.db.team.create({name: 'team2'})
+      let team3 = await models.db.team.create({name: 'team3'})
       await koaRequest
         .patch('/teams/' + team2.id)
         .send({name: team3.name})
@@ -139,7 +139,7 @@ describe('teams', () => {
 
   context('DELETE /teams/:id', () => {
     it('should delete team with id=id', async () => {
-      let team = await model.db.team.create({name: 'team1'})
+      let team = await models.db.team.create({name: 'team1'})
       await koaRequest
         .del('/teams/' + team.id)
         .expect(204)

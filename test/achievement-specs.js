@@ -1,17 +1,17 @@
 /* eslint-env mocha */
 
 const koaRequest = require('./routes-specs').koaRequest
-const model = require('./routes-specs').model
+const models = require('./routes-specs').models
 
 beforeEach(function syncDB () {
-  return model.db.sequelize.sync({force: true})
+  return models.db.sequelize.sync({force: true})
 })
 
 describe('achievement', () => {
   context('GET /achievement', () => {
     it('should return achievements', async () => {
-      let a1 = await model.db.achievement.create({name: 'London', distance: 100})
-      let a2 = await model.db.achievement.create({name: 'Paris', distance: 200})
+      let a1 = await models.db.achievement.create({name: 'London', distance: 100})
+      let a2 = await models.db.achievement.create({name: 'Paris', distance: 200})
       await koaRequest
         .get('/achievement')
         .expect(200)
@@ -23,9 +23,9 @@ describe('achievement', () => {
         })
     })
     it('should return achievements with teams', async () => {
-      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
-      let t1 = await model.db.team.create({name: 't1'})
-      await model.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
+      let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
+      let t1 = await models.db.team.create({name: 't1'})
+      await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/achievement')
         .expect(200)
@@ -44,7 +44,7 @@ describe('achievement', () => {
         .expect(204)
     })
     it('should return achievement with id=id', async () => {
-      let achievement = await model.db.achievement.create({name: 'London', distance: 100})
+      let achievement = await models.db.achievement.create({name: 'London', distance: 100})
       await koaRequest
         .get('/achievement/' + achievement.id)
         .expect(200)
@@ -54,9 +54,9 @@ describe('achievement', () => {
         })
     })
     it('should return achievement with id=id with teams', async () => {
-      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
-      let t1 = await model.db.team.create({name: 't1'})
-      await model.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
+      let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
+      let t1 = await models.db.team.create({name: 't1'})
+      await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/achievement/' + a1.id)
         .expect(200)
@@ -82,7 +82,7 @@ describe('achievement', () => {
         })
     })
     it('should return 409 if achievement name conflict', async () => {
-      let a2 = await model.db.achievement.create({name: 'Paris', distance: 100})
+      let a2 = await models.db.achievement.create({name: 'Paris', distance: 100})
       await koaRequest
         .post('/achievement')
         .send({name: a2.name, distance: a2.distance})
@@ -95,7 +95,7 @@ describe('achievement', () => {
 
   context('PATCH /achievement/:id', () => {
     it('should change achievement name and distance', async () => {
-      let achievement = await model.db.achievement.create({name: 'London', distance: 100})
+      let achievement = await models.db.achievement.create({name: 'London', distance: 100})
       await koaRequest
         .patch('/achievement/' + achievement.id)
         .send({name: 'Paris', distance: 200})
@@ -108,8 +108,8 @@ describe('achievement', () => {
         .expect(400, [0])
     })
     it('should return 400 if achievement name conflict', async () => {
-      let a2 = await model.db.achievement.create({name: 'Paris', distance: 200})
-      let a3 = await model.db.achievement.create({name: 'Amsterdam', distance: 300})
+      let a2 = await models.db.achievement.create({name: 'Paris', distance: 200})
+      let a3 = await models.db.achievement.create({name: 'Amsterdam', distance: 300})
       await koaRequest
         .patch('/achievement/' + a2.id)
         .send({name: a3.name})
@@ -122,7 +122,7 @@ describe('achievement', () => {
 
   context('DELETE /achievement/:id', () => {
     it('should delete achievement with id=id', async () => {
-      let achievement = await model.db.achievement.create({name: 'London', distance: 100})
+      let achievement = await models.db.achievement.create({name: 'London', distance: 100})
       await koaRequest
         .del('/achievement/' + achievement.id)
         .expect(204)
