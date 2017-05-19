@@ -34,7 +34,7 @@ describe('teams', () => {
     it('should return teams with achievements', async () => {
       let t1 = await model.db.team.create({name: 't1'})
       let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
-      await model.db.achievements.create({team: t1.id, achievement: a1.id})
+      await model.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/teams')
         .expect(200)
@@ -75,7 +75,7 @@ describe('teams', () => {
     it('should return team with id=id with achievements', async () => {
       let t1 = await model.db.team.create({name: 't1'})
       let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
-      await model.db.achievements.create({team: t1.id, achievement: a1.id})
+      await model.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/teams/' + t1.id)
         .expect(200)
