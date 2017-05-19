@@ -30,10 +30,10 @@ function main() {
       case "${3}" in
       join-team)
         precondition "${#} -gt 3" "must have team id to join a team"
-        pp $(_curl PATCH participants/${2} "{\"team\":\"${4}\"}")
+        pp $(_curl PATCH participants/${2} "{\"team_id\":\"${4}\"}")
       ;;
       leave-team)
-        pp $(_curl PATCH participants/${2} "{\"team\":null}")
+        pp $(_curl PATCH participants/${2} "{\"team_id\":null}")
       ;;
       esac
     else
