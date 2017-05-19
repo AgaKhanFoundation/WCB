@@ -17,6 +17,20 @@ npm test
 npm run start-dev
 ```
 
+### Database Migrations
+
+#### Up
+
+```
+npm run migrate
+```
+
+#### Down
+
+```
+npm run migrate:undo
+```
+
 ### Docker Instructions
 
 To build the docker container locally

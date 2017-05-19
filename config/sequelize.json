@@ -1,0 +1,4 @@
+{
+  "migrations-path": "lib/migrations",
+  "models-path": "lib/models"
+}
