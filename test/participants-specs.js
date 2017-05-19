@@ -23,6 +23,23 @@ describe('participants', () => {
           response.body.fbid.should.equal(participant.fbid)
         })
     })
+    it('should return participant with fbid=fbid including team, participants, and achievements', async () => {
+      let t1 = await model.db.team.create({name: 't1'})
+      let p1 = await model.db.participant.create({fbid: 'p1', team_id: t1.id})
+      let a1 = await model.db.achievement.create({name: 'a1', distance: 1})
+      await model.db.achievements.create({team: t1.id, achievement: a1.id})
+      await koaRequest
+        .get('/participants/' + p1.fbid)
+        .expect(200)
+        .then(response => {
+          response.body.fbid.should.equal(p1.fbid)
+          response.body.team_id.should.equal(t1.id)
+          response.body.team.name.should.equal(t1.name)
+          response.body.team.participants[0].fbid.should.equal(p1.fbid)
+          response.body.team.achievements[0].name.should.equal(a1.name)
+          response.body.team.achievements[0].distance.should.equal(a1.distance)
+        })
+    })
   })
 
   context('POST /participants', () => {
@@ -55,20 +72,20 @@ describe('participants', () => {
       let t1 = await model.db.team.create({name: 't1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
-        .send({team: t1.id})
+        .send({team_id: t1.id})
         .expect(200)
     })
     it('should return 400 if no participant with id=id', async () => {
       await koaRequest
         .patch('/participants/' + 1)
-        .send({team: 1})
+        .send({team_id: 1})
         .expect(400, [0])
     })
     it('should return 400 if team does not exist', async () => {
       let p1 = await model.db.participant.create({fbid: 'p1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
-        .send({team: 1})
+        .send({team_id: 1})
         .expect(400, {'error': {
           'code': 400,
           'message': 'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'
