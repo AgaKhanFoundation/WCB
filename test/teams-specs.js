@@ -22,7 +22,7 @@ describe('teams', () => {
     })
     it('should return teams with participants', async () => {
       let t1 = await model.db.team.create({name: 't1'})
-      let p1 = await model.db.participant.create({fbid: 'p1', team: t1.id})
+      let p1 = await model.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams')
         .expect(200)
@@ -63,7 +63,7 @@ describe('teams', () => {
     })
     it('should return team with id=id with participants', async () => {
       let t1 = await model.db.team.create({name: 't1'})
-      let p1 = await model.db.participant.create({fbid: 'p1', team: t1.id})
+      let p1 = await model.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams/' + t1.id)
         .expect(200)
