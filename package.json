@@ -39,6 +39,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "chai-moment": "^0.1.0",
     "coveralls": "^2.13.1",
     "eslint": "^3.17.1",
     "eslint-config-standard": "^7.0.1",
