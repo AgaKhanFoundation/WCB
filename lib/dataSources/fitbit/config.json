@@ -1,0 +1,12 @@
+{
+  "creds": {
+    "clientID": "228HY3",
+    "clientSecret": "8f4cdef35a7c9b1c92ee175bdd015f49"
+  },
+  "uris": {
+    "authorizationUri": "https://www.fitbit.com",
+    "authorizationPath": "/oauth2/authorize",
+    "tokenUri": "https://api.fitbit.com",
+    "tokenPath": "/oauth2/token"
+  }
+}
