@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export SCHEME=${SCHEME:=http}
+export SERVER=${SERVER:=localhost}
+export PORT=${PORT:=7777}
+
+./utils/client.py "${@}"
