@@ -11,23 +11,26 @@ import os
 import urllib2
 import urlparse
 
+# Resolve CLI entity to endpoint and GET, POST, PATCH, DELETE parameters
 ENTITIES = {
-    '/': ['', ('',), (), ()],
-    'achievement': ['achievement', ('', 'id'), ('name', 'distance'), ('id',)],
+    '/': ['', ('',), (), (), ()],
+    'achievement': ['achievement', ('', 'id'), ('name', 'distance'), ('id',), ('id',)],
     'achievements': ['achievements', ('team', 'achievement'), ('team_id', 'achievement_id'),
-                     ('id',)],
-    'cause': ['causes', ('', 'id'), ('name',), ('id',)],
-    'donor': ['donor', (), (), ()],
-    'donors': ['donors', (), (), ()],
+                     ('id',), ('id',)],
+    'cause': ['causes', ('', 'id'), ('name',), ('id',), ('id',)],
+    'donor': ['donor', (), (), (), ()],
+    'donors': ['donors', (), (), (), ()],
     'event': ['events', ('', 'id'), ('name', 'description', 'start_date', 'end_date', 'team_limit',
-                                     'team_building_start', 'team_building_end'), ('id',)],
-    'locality': ['localities', ('', 'id'), ('name',), ('id',)],
-    'participant': ['participants', ('fbid',), ('fbid',), ('fbid',)],
-    'record': ['records', ('id',), ('date', 'distance', 'participant_id', 'source_id'), ()],
-    'source': ['sources', ('', 'id'), ('name',), ('id',)],
-    'sponsor': ['sponsor', (), (), ()],
-    'sponsors': ['sponsors', (), (), ()],
-    'team': ['teams', ('', 'id'), ('name',), ('id',)],
+                                     'team_building_start', 'team_building_end'), ('id',),
+              ('id',)],
+    'locality': ['localities', ('', 'id'), ('name',), ('id',), ('id',)],
+    'participant': ['participants', ('fbid',), ('fbid',), ('fbid',), ('fbid',)],
+    'record': ['records', ('id',), ('date', 'distance', 'participant_id', 'source_id'), (),
+               ('id',)],
+    'source': ['sources', ('', 'id'), ('name',), ('id',), ('id',)],
+    'sponsor': ['sponsor', (), (), (), ()],
+    'sponsors': ['sponsors', (), (), (), ()],
+    'team': ['teams', ('', 'id'), ('name',), ('id',), ('id',)],
 }
 
 CRUD = {
@@ -36,6 +39,8 @@ CRUD = {
     'u': 'PATCH',
     'd': 'DELETE',
 }
+
+(API, READ, CREATE, UPDATE, DELETE) = range(5)
 
 
 def construct_url(endpoint):
@@ -53,14 +58,16 @@ def construct_url(endpoint):
 
 def get(entity, endpoint, action, url, args):
     """Construct a GET request for the given entity and parameters."""
-    if not ENTITIES[entity][1]:
+    if not ENTITIES[entity][READ]:
         print('Method Not Allowed')
-        return
+        return None
+
     if entity == 'achievements':
         if not args:
             print('Query achievements with "team_id=<team_id>" \
                    or "achievement_id=<achievement_id>"')
-            return
+            return None
+
         if args[0].startswith('team'):
             url += '/team/{}'.format(args[0].split('=')[1])
         elif args[0].startswith('achievement'):
@@ -68,8 +75,10 @@ def get(entity, endpoint, action, url, args):
         else:
             print('Query achievements with "team_id=<team_id>" \
                    or "achievement_id=<achievement_id>"')
-            return
+            return None
+
         return urllib2.Request(url)
+
     if args:
         url += '/{}'.format(args[0])
     return urllib2.Request(url)
@@ -77,16 +86,16 @@ def get(entity, endpoint, action, url, args):
 
 def post(entity, endpoint, action, url, args):
     """Construct a POST request for the given entity and parameters."""
-    if not ENTITIES[entity][2]:
+    if not ENTITIES[entity][CREATE]:
         print('Method Not Allowed')
-        return
-    if len(args) != len(ENTITIES[entity][2]):
+        return None
+
+    if len(args) != len(ENTITIES[entity][CREATE]):
         print('Create {} requires the following parameters:\n{}'
-              .format(entity, '\n'.join(ENTITIES[entity][2])))
-        return
-    data = {}
-    for key, arg in zip(ENTITIES[entity][2], args):
-        data[key] = arg
+              .format(entity, '\n'.join(ENTITIES[entity][CREATE])))
+        return None
+
+    data = dict(zip(ENTITIES[entity][CREATE], args))
     req = urllib2.Request(url)
     req.add_data(json.dumps(data))
     return req
@@ -94,21 +103,21 @@ def post(entity, endpoint, action, url, args):
 
 def patch(entity, endpoint, action, url, args):
     """Construct a PATCH request for the given entity and parameters."""
-    if not ENTITIES[entity][3]:
+    if not ENTITIES[entity][UPDATE]:
         print('Method Not Allowed')
-        return
+        return None
+
     if not args:
-        print('{} {} required'.format(entity, ENTITIES[entity][3][0]))
-        return
+        print('{} {} required'.format(entity, ENTITIES[entity][UPDATE][0]))
+        return None
+
     url += '/{}'.format(args[0])
     args = args[1:]
     if not args:
         print('fields to update must be provided in key=value format')
-        return
-    data = {}
-    for arg in args:
-        key, val = arg.split('=')
-        data[key] = val
+        return None
+
+    data = dict(arg.split('=') for arg in args)
     req = urllib2.Request(url)
     req.add_data(json.dumps(data))
     return req
@@ -116,15 +125,14 @@ def patch(entity, endpoint, action, url, args):
 
 def destroy(entity, endpoint, action, url, args):
     """Construct a DELETE request for the given entity and parameters."""
-    if not endpoint:
+    if not ENTITIES[entity][DELETE]:
         print('Method Not Allowed')
-        return
+        return None
+
     if not args:
-        if entity == 'achievements':
-            print('{} id required'.format(entity))
-        else:
-            print('{} {} required'.format(entity, ENTITIES[entity][1][-1]))
-        return
+        print('{} {} required'.format(entity, ENTITIES[entity][DELETE][0]))
+        return None
+
     url += '/{}'.format(args[0])
     return urllib2.Request(url)
 
@@ -149,7 +157,7 @@ def main():
 
     args = parser.parse_known_args()
 
-    endpoint = ENTITIES[args[0].entity][0]
+    endpoint = ENTITIES[args[0].entity][API]
     action = CRUD[args[0].subparser_name]
 
     req = args[0].func(args[0].entity, endpoint, action, construct_url(endpoint), args[1])
