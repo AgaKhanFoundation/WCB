@@ -35,6 +35,9 @@ function main() {
       leave-team)
         pp $(_curl PATCH participants/${2} "{\"team_id\":null}")
       ;;
+      set-primary-cause)
+        pp $(_curl PATCH participants/${2} "{\"cause_id\":${4}}")
+      ;;
       esac
     else
       case "${2}" in
@@ -92,6 +95,21 @@ function main() {
     *)
       echo >&2 unknown operation \`${2}\`
       return ${EXIT_FAILURE}
+    ;;
+    esac
+  ;;
+  cause)
+    case "${2}" in
+    create)
+      precondition "${@} -gt 2" "must have name to create cause"
+      pp $(_curl POST causes "{\"name\":\"${3}\"}")
+    ;;
+    delete)
+      precondition "${@} -gt 2" "must have ause-id to delete cause"
+      _curl DELETE causes/${3}
+    ;;
+    query)
+      pp $(_curl GET causes${3:+/${3}})
     ;;
     esac
   ;;
