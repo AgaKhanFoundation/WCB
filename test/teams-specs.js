@@ -87,6 +87,38 @@ describe('teams', () => {
     })
   })
 
+  context('GET /teams/:id/stats', () => {
+    it('should return 204 if no team with id=id', async () => {
+      await koaRequest
+        .get('/teams/1/stats')
+        .expect(204)
+    })
+    it('should return sum of distances for participants in team with id=id', async () => {
+      let t1 = await models.db.team.create({name: 't1'})
+      let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
+      let p2 = await models.db.participant.create({fbid: 'p2', team_id: t1.id})
+      let s1 = await models.db.source.create({name: 's1'})
+      let r1 = await models.db.record.create({
+        date: '2017-01-01T00:00:00Z',
+        distance: 6,
+        participant_id: p1.id,
+        source_id: s1.id
+      })
+      let r2 = await models.db.record.create({
+        date: '2017-01-02T00:00:00Z',
+        distance: 12,
+        participant_id: p2.id,
+        source_id: s1.id
+      })
+      await koaRequest
+        .get('/teams/' + t1.id + '/stats')
+        .expect(200)
+        .then(response => {
+          response.body.distance.should.equal(r1.distance + r2.distance)
+        })
+    })
+  })
+
   context('POST /teams', () => {
     it('should create team with name=name', async () => {
       let name = 'team1'

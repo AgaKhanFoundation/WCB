@@ -42,6 +42,36 @@ describe('participants', () => {
     })
   })
 
+  context('GET /participants/:fbid/stats', () => {
+    it('should return 204 if no participant with fbid=fbid', async () => {
+      await koaRequest
+        .get('/participants/1/stats')
+        .expect(204)
+    })
+    it('should return sum of distances for participant with fbid=fbid', async () => {
+      let p1 = await models.db.participant.create({fbid: 'p1'})
+      let s1 = await models.db.source.create({name: 's1'})
+      let r1 = await models.db.record.create({
+        date: '2017-01-01T00:00:00Z',
+        distance: 10,
+        participant_id: p1.id,
+        source_id: s1.id
+      })
+      let r2 = await models.db.record.create({
+        date: '2017-01-02T00:00:00Z',
+        distance: 4,
+        participant_id: p1.id,
+        source_id: s1.id
+      })
+      await koaRequest
+        .get('/participants/' + p1.fbid + '/stats')
+        .expect(200)
+        .then(response => {
+          response.body.distance.should.equal(r1.distance + r2.distance)
+        })
+    })
+  })
+
   context('POST /participants', () => {
     it('should create participant with fbid=fbid', async () => {
       let fbid = 'p1'
