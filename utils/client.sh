@@ -80,23 +80,40 @@ function main() {
     esac
   ;;
   event)
-    case "${2}" in
-    create)
-      precondition "${#} -eq 9" "must have event name, description, start date, end date, team limit, team building start date, team building end date to create event"
-      pp $(_curl POST events "{\"name\":\"${3}\",\"description\":\"${4}\",\"start_date\":\"${5}\",\"end_date\":\"${6}\",\"team_limit\":${7},\"team_building_start\":\"${8}\",\"team_building_end\":\"${9}\"}")
-    ;;
-    delete)
-      precondition "${#} -gt 2" "must have event-id to delete event"
-      _curl DELETE events/${3}
-    ;;
-    query)
-      pp $(_curl GET events${3:+/${3}})
-    ;;
-    *)
-      echo >&2 unknown operation \`${2}\`
-      return ${EXIT_FAILURE}
-    ;;
-    esac
+    if [[ ${2} =~ [0-9]+ ]] ; then
+      case "${3}" in
+      set-start-date)
+        precondition "${#} -gt 3" "must have start-date to set start-date"
+        pp $(_curl PATCH events/${2} "{\"start_date\":\"${4}\"}")
+      ;;
+      set-end-date)
+        precondition "${#} -gt 3" "must have end-date to set end-date"
+        pp $(_curl PATCH events/${2} "{\"end_date\":\"${4}\"}")
+      ;;
+      set-cause)
+        precondition "${#} -gt 3" "must have cause id to set cause"
+        pp $(_curl PATCH events/${2} "{\"cause_id\":${4}}")
+      ;;
+      esac
+    else
+      case "${2}" in
+      create)
+        precondition "${#} -eq 9" "must have event name, description, start date, end date, team limit, team building start date, team building end date to create event"
+        pp $(_curl POST events "{\"name\":\"${3}\",\"description\":\"${4}\",\"start_date\":\"${5}\",\"end_date\":\"${6}\",\"team_limit\":${7},\"team_building_start\":\"${8}\",\"team_building_end\":\"${9}\"}")
+      ;;
+      delete)
+        precondition "${#} -gt 2" "must have event-id to delete event"
+        _curl DELETE events/${3}
+      ;;
+      query)
+        pp $(_curl GET events${3:+/${3}})
+      ;;
+      *)
+        echo >&2 unknown operation \`${2}\`
+        return ${EXIT_FAILURE}
+      ;;
+      esac
+    fi
   ;;
   cause)
     case "${2}" in
