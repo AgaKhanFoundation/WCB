@@ -12,6 +12,7 @@ describe('events', () => {
     it('should return events', async () => {
       let e1 = await models.db.event.create({
         name: 'e1',
+        image: 'i1',
         description: 'event 1',
         start_date: '2017-02-01T00:00:00Z',
         end_date: '2017-12-31T00:00:00Z',
@@ -21,6 +22,7 @@ describe('events', () => {
       })
       let e2 = await models.db.event.create({
         name: 'e2',
+        image: 'i2',
         description: 'event 2',
         start_date: '2017-02-01T00:00:00Z',
         end_date: '2017-12-31T00:00:00Z',
@@ -33,6 +35,7 @@ describe('events', () => {
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(e1.name)
+          response.body[0].image.should.equal(e1.image)
           response.body[0].description.should.equal(e1.description)
           response.body[0].start_date.should.be.sameMoment(e1.start_date)
           response.body[0].end_date.should.be.sameMoment(e1.end_date)
@@ -40,6 +43,7 @@ describe('events', () => {
           response.body[0].team_building_start.should.be.sameMoment(e1.team_building_start)
           response.body[0].team_building_end.should.be.sameMoment(e1.team_building_end)
           response.body[1].name.should.equal(e2.name)
+          response.body[1].image.should.equal(e2.image)
           response.body[1].description.should.equal(e2.description)
           response.body[1].start_date.should.be.sameMoment(e2.start_date)
           response.body[1].end_date.should.be.sameMoment(e2.end_date)
@@ -59,6 +63,7 @@ describe('events', () => {
     it('should return event with id=id', async () => {
       let e1 = await models.db.event.create({
         name: 'e1',
+        image: 'i1',
         description: 'event 1',
         start_date: '2017-02-01T00:00:00Z',
         end_date: '2017-12-31T00:00:00Z',
@@ -71,6 +76,7 @@ describe('events', () => {
         .expect(200)
         .then(response => {
           response.body.name.should.equal(e1.name)
+          response.body.image.should.equal(e1.image)
           response.body.description.should.equal(e1.description)
           response.body.start_date.should.be.sameMoment(e1.start_date)
           response.body.end_date.should.be.sameMoment(e1.end_date)
@@ -84,6 +90,7 @@ describe('events', () => {
   context('POST /events', () => {
     it('should create event with name=name', async () => {
       let name = 'e1'
+      let image = 'i1'
       let description = 'event 1'
       let startDate = '2017-02-01T00:00:00Z'
       let endDate = '2017-12-31T00:00:00Z'
@@ -94,6 +101,7 @@ describe('events', () => {
         .post('/events')
         .send({
           name,
+          image,
           description,
           start_date: startDate,
           end_date: endDate,
@@ -104,6 +112,7 @@ describe('events', () => {
         .expect(201)
         .then(response => {
           response.body.name.should.equal(name)
+          response.body.image.should.equal(image)
           response.body.description.should.equal(description)
           response.body.start_date.should.be.sameMoment(startDate)
           response.body.end_date.should.be.sameMoment(endDate)
@@ -114,6 +123,7 @@ describe('events', () => {
     })
     it('should return 409 if event name conflict', async () => {
       let name = 'e1'
+      let image = 'i1'
       let description = 'event 1'
       let startDate = '2017-02-01T00:00:00Z'
       let endDate = '2017-12-31T00:00:00Z'
@@ -122,6 +132,7 @@ describe('events', () => {
       let teamBuildingEnd = '2017-01-31T00:00:00Z'
       let e1 = await models.db.event.create({
         name,
+        image,
         description,
         start_date: startDate,
         end_date: endDate,
@@ -133,6 +144,7 @@ describe('events', () => {
         .post('/events')
         .send({
           name: 'e1',
+          image: 'i2',
           description: 'event 2',
           start_date: '2018-02-01T00:00:00Z',
           end_date: '2018-12-31T00:00:00Z',
@@ -148,9 +160,10 @@ describe('events', () => {
   })
 
   context('PATCH /events/:id', () => {
-    it('should change event name, description, start_date, end_date, team_limit, team_building_start, team_building_end', async () => {
+    it('should change event name, image, description, start_date, end_date, team_limit, team_building_start, team_building_end', async () => {
       let e1 = await models.db.event.create({
         name: 'e1',
+        image: 'i1',
         description: 'event 1',
         start_date: '2017-02-01T00:00:00Z',
         end_date: '2017-12-31T00:00:00Z',
@@ -162,6 +175,7 @@ describe('events', () => {
         .patch('/events/' + e1.id)
         .send({
           name: 'e2',
+          image: 'i2',
           description: 'event 2',
           startDate: '2018-02-01T00:00:00Z',
           endDate: '2018-12-31T00:00:00Z',
@@ -180,6 +194,7 @@ describe('events', () => {
     it('should return 400 if event name conflict', async () => {
       let e2 = await models.db.event.create({
         name: 'e2',
+        image: 'i2',
         description: 'event 2',
         start_date: '2017-02-01T00:00:00Z',
         end_date: '2017-12-31T00:00:00Z',
@@ -189,6 +204,7 @@ describe('events', () => {
       })
       let e3 = await models.db.event.create({
         name: 'e3',
+        image: 'i3',
         description: 'event 3',
         start_date: '2017-02-01T00:00:00Z',
         end_date: '2017-12-31T00:00:00Z',
@@ -210,6 +226,7 @@ describe('events', () => {
     it('should delete event with id=id', async () => {
       let e1 = await models.db.event.create({
         name: 'e1',
+        image: 'i1',
         description: 'event 1',
         start_date: '2017-02-01T00:00:00Z',
         end_date: '2017-12-31T00:00:00Z',

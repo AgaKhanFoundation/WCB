@@ -10,29 +10,32 @@ beforeEach(function syncDB () {
 describe('teams', () => {
   context('GET /teams', () => {
     it('should return teams', async () => {
-      let team1 = await models.db.team.create({name: 'team1'})
-      let team2 = await models.db.team.create({name: 'team2'})
+      let t1 = await models.db.team.create({name: 't1', image: 'i1'})
+      let t2 = await models.db.team.create({name: 't2', image: 'i2'})
       await koaRequest
         .get('/teams')
         .expect(200)
         .then(response => {
-          response.body[0].name.should.equal(team1.name)
-          response.body[1].name.should.equal(team2.name)
+          response.body[0].name.should.equal(t1.name)
+          response.body[0].image.should.equal(t1.image)
+          response.body[1].name.should.equal(t2.name)
+          response.body[1].image.should.equal(t2.image)
         })
     })
     it('should return teams with participants', async () => {
-      let t1 = await models.db.team.create({name: 't1'})
+      let t1 = await models.db.team.create({name: 't1', image: 'i1'})
       let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams')
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(t1.name)
+          response.body[0].image.should.equal(t1.image)
           response.body[0].participants[0].fbid.should.equal(p1.fbid)
         })
     })
     it('should return teams with achievements', async () => {
-      let t1 = await models.db.team.create({name: 't1'})
+      let t1 = await models.db.team.create({name: 't1', image: 'i1'})
       let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
       await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
@@ -40,6 +43,7 @@ describe('teams', () => {
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(t1.name)
+          response.body[0].image.should.equal(t1.image)
           response.body[0].achievements[0].name.should.equal(a1.name)
           response.body[0].achievements[0].distance.should.equal(a1.distance)
         })
@@ -53,27 +57,29 @@ describe('teams', () => {
         .expect(204)
     })
     it('should return team with id=id', async () => {
-      let team = await models.db.team.create({name: 'team1'})
+      let t1 = await models.db.team.create({name: 't1', image: 'i1'})
       await koaRequest
-        .get('/teams/' + team.id)
+        .get('/teams/' + t1.id)
         .expect(200)
         .then(response => {
-          response.body.name.should.equal(team.name)
+          response.body.name.should.equal(t1.name)
+          response.body.image.should.equal(t1.image)
         })
     })
     it('should return team with id=id with participants', async () => {
-      let t1 = await models.db.team.create({name: 't1'})
+      let t1 = await models.db.team.create({name: 't1', image: 'i1'})
       let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams/' + t1.id)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(t1.name)
+          response.body.image.should.equal(t1.image)
           response.body.participants[0].fbid.should.equal(p1.fbid)
         })
     })
     it('should return team with id=id with achievements', async () => {
-      let t1 = await models.db.team.create({name: 't1'})
+      let t1 = await models.db.team.create({name: 't1', image: 'i1'})
       let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
       await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
@@ -81,6 +87,7 @@ describe('teams', () => {
         .expect(200)
         .then(response => {
           response.body.name.should.equal(t1.name)
+          response.body.image.should.equal(t1.image)
           response.body.achievements[0].name.should.equal(a1.name)
           response.body.achievements[0].distance.should.equal(a1.distance)
         })
@@ -121,7 +128,7 @@ describe('teams', () => {
 
   context('POST /teams', () => {
     it('should create team with name=name', async () => {
-      let name = 'team1'
+      let name = 't1'
       await koaRequest
         .post('/teams')
         .send({name})
@@ -130,24 +137,36 @@ describe('teams', () => {
           response.body.name.should.equal(name)
         })
     })
-    it('should return 409 if team name conflict', async () => {
-      let team2 = await models.db.team.create({name: 'team2'})
+    it('should create team with name=name and image=image', async () => {
+      let name = 't1'
+      let image = 'i1'
       await koaRequest
         .post('/teams')
-        .send({name: team2.name})
+        .send({name, image})
+        .expect(201)
+        .then(response => {
+          response.body.name.should.equal(name)
+          response.body.image.should.equal(image)
+        })
+    })
+    it('should return 409 if team name conflict', async () => {
+      let t2 = await models.db.team.create({name: 't2'})
+      await koaRequest
+        .post('/teams')
+        .send({name: t2.name})
         .expect(409, {'error': {
           'code': 409,
-          'message': `team named "${team2.name}" already exists`
+          'message': `team named "${t2.name}" already exists`
         }})
     })
   })
 
   context('PATCH /teams/:id', () => {
     it('should change team name', async () => {
-      let team = await models.db.team.create({name: 'team1'})
+      let t1 = await models.db.team.create({name: 't1'})
       await koaRequest
-        .patch('/teams/' + team.id)
-        .send({name: 'firstTeam'})
+        .patch('/teams/' + t1.id)
+        .send({name: 't2'})
         .expect(200, [1])
     })
     it('should return 400 if no team with id=id', async () => {
@@ -157,11 +176,11 @@ describe('teams', () => {
         .expect(400, [0])
     })
     it('should return 400 if team name conflict', async () => {
-      let team2 = await models.db.team.create({name: 'team2'})
-      let team3 = await models.db.team.create({name: 'team3'})
+      let t2 = await models.db.team.create({name: 't2'})
+      let t3 = await models.db.team.create({name: 't3'})
       await koaRequest
-        .patch('/teams/' + team2.id)
-        .send({name: team3.name})
+        .patch('/teams/' + t2.id)
+        .send({name: t3.name})
         .expect(400, {'error': {
           'code': 400,
           'message': 'Validation error'
@@ -171,9 +190,9 @@ describe('teams', () => {
 
   context('DELETE /teams/:id', () => {
     it('should delete team with id=id', async () => {
-      let team = await models.db.team.create({name: 'team1'})
+      let t1 = await models.db.team.create({name: 't1'})
       await koaRequest
-        .del('/teams/' + team.id)
+        .del('/teams/' + t1.id)
         .expect(204)
     })
     it('should return 400 if no team with id=id', async () => {
