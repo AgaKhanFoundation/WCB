@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -30,6 +31,7 @@ describe('events', () => {
       })
       await koaRequest
         .get('/events')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(e1.name)
@@ -54,6 +56,7 @@ describe('events', () => {
     it('should return 204 if no event with id=id', async () => {
       await koaRequest
         .get('/events/1')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return event with id=id', async () => {
@@ -68,6 +71,7 @@ describe('events', () => {
       })
       await koaRequest
         .get('/events/' + e1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(e1.name)
@@ -101,6 +105,7 @@ describe('events', () => {
           team_building_start: teamBuildingStart,
           team_building_end: teamBuildingEnd
         })
+        .set('access_token', accessToken)
         .expect(201)
         .then(response => {
           response.body.name.should.equal(name)
@@ -140,6 +145,7 @@ describe('events', () => {
           team_building_start: '2018-01-01T00:00:00Z',
           team_building_end: '2018-01-31T00:00:00Z'
         })
+        .set('access_token', accessToken)
         .expect(409, {'error': {
           'code': 409,
           'message': `event named "${e1.name}" already exists`
@@ -160,6 +166,7 @@ describe('events', () => {
       })
       await koaRequest
         .patch('/events/' + e1.id)
+        .set('access_token', accessToken)
         .send({
           name: 'e2',
           description: 'event 2',
@@ -174,6 +181,7 @@ describe('events', () => {
     it('should return 400 if no event with id=id', async () => {
       await koaRequest
         .patch('/events/' + 1)
+        .set('access_token', accessToken)
         .send({name: 'e2'})
         .expect(400, [0])
     })
@@ -198,6 +206,7 @@ describe('events', () => {
       })
       await koaRequest
         .patch('/events/' + e2.id)
+        .set('access_token', accessToken)
         .send({name: e3.name})
         .expect(400, {'error': {
           'code': 400,
@@ -219,11 +228,13 @@ describe('events', () => {
       })
       await koaRequest
         .del('/events/' + e1.id)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no event with id=id', async () => {
       await koaRequest
         .del('/events/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
     })
   })

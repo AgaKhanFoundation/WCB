@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -14,6 +15,7 @@ describe('localities', () => {
       let l2 = await models.db.locality.create({name: 'l2'})
       await koaRequest
         .get('/localities')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(l1.name)
@@ -26,12 +28,14 @@ describe('localities', () => {
     it('should return 204 if no locality with id=id', async () => {
       await koaRequest
         .get('/localities/1')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return locality with id=id', async () => {
       let l1 = await models.db.locality.create({name: 'l1'})
       await koaRequest
         .get('/localities/' + l1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(l1.name)
@@ -44,6 +48,7 @@ describe('localities', () => {
       let name = 'l1'
       await koaRequest
         .post('/localities')
+        .set('access_token', accessToken)
         .send({name})
         .expect(201)
         .then(response => {
@@ -54,6 +59,7 @@ describe('localities', () => {
       let l2 = await models.db.locality.create({name: 'l2'})
       await koaRequest
         .post('/localities')
+        .set('access_token', accessToken)
         .send({name: l2.name})
         .expect(409, {'error': {
           'code': 409,
@@ -67,12 +73,14 @@ describe('localities', () => {
       let l1 = await models.db.locality.create({name: 'l1'})
       await koaRequest
         .patch('/localities/' + l1.id)
+        .set('access_token', accessToken)
         .send({name: 'l2'})
         .expect(200, [1])
     })
     it('should return 400 if no locality with id=id', async () => {
       await koaRequest
         .patch('/localities/' + 1)
+        .set('access_token', accessToken)
         .send({name: 'l2'})
         .expect(400, [0])
     })
@@ -81,6 +89,7 @@ describe('localities', () => {
       let l3 = await models.db.locality.create({name: 'l3'})
       await koaRequest
         .patch('/localities/' + l2.id)
+        .set('access_token', accessToken)
         .send({name: l3.name})
         .expect(400, {'error': {
           'code': 400,
@@ -94,11 +103,13 @@ describe('localities', () => {
       let l1 = await models.db.locality.create({name: 'l1'})
       await koaRequest
         .del('/localities/' + l1.id)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no locality with id=id', async () => {
       await koaRequest
         .del('/localities/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
     })
   })

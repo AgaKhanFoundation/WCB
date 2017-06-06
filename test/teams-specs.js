@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -14,6 +15,7 @@ describe('teams', () => {
       let team2 = await models.db.team.create({name: 'team2'})
       await koaRequest
         .get('/teams')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(team1.name)
@@ -25,6 +27,7 @@ describe('teams', () => {
       let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(t1.name)
@@ -37,6 +40,7 @@ describe('teams', () => {
       await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/teams')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(t1.name)
@@ -50,12 +54,14 @@ describe('teams', () => {
     it('should return 204 if no team with id=id', async () => {
       await koaRequest
         .get('/teams/1')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return team with id=id', async () => {
       let team = await models.db.team.create({name: 'team1'})
       await koaRequest
         .get('/teams/' + team.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(team.name)
@@ -66,6 +72,7 @@ describe('teams', () => {
       let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
       await koaRequest
         .get('/teams/' + t1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(t1.name)
@@ -78,6 +85,7 @@ describe('teams', () => {
       await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/teams/' + t1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(t1.name)
@@ -91,6 +99,7 @@ describe('teams', () => {
     it('should return 204 if no team with id=id', async () => {
       await koaRequest
         .get('/teams/1/stats')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return sum of distances for participants in team with id=id', async () => {
@@ -112,6 +121,7 @@ describe('teams', () => {
       })
       await koaRequest
         .get('/teams/' + t1.id + '/stats')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.distance.should.equal(r1.distance + r2.distance)
@@ -124,6 +134,7 @@ describe('teams', () => {
       let name = 'team1'
       await koaRequest
         .post('/teams')
+        .set('access_token', accessToken)
         .send({name})
         .expect(201)
         .then(response => {
@@ -134,6 +145,7 @@ describe('teams', () => {
       let team2 = await models.db.team.create({name: 'team2'})
       await koaRequest
         .post('/teams')
+        .set('access_token', accessToken)
         .send({name: team2.name})
         .expect(409, {'error': {
           'code': 409,
@@ -147,12 +159,14 @@ describe('teams', () => {
       let team = await models.db.team.create({name: 'team1'})
       await koaRequest
         .patch('/teams/' + team.id)
+        .set('access_token', accessToken)
         .send({name: 'firstTeam'})
         .expect(200, [1])
     })
     it('should return 400 if no team with id=id', async () => {
       await koaRequest
         .patch('/teams/' + 1)
+        .set('access_token', accessToken)
         .send({name: 't2'})
         .expect(400, [0])
     })
@@ -161,6 +175,7 @@ describe('teams', () => {
       let team3 = await models.db.team.create({name: 'team3'})
       await koaRequest
         .patch('/teams/' + team2.id)
+        .set('access_token', accessToken)
         .send({name: team3.name})
         .expect(400, {'error': {
           'code': 400,
@@ -174,11 +189,13 @@ describe('teams', () => {
       let team = await models.db.team.create({name: 'team1'})
       await koaRequest
         .del('/teams/' + team.id)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no team with id=id', async () => {
       await koaRequest
         .del('/teams/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
     })
   })

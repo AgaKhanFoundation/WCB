@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -12,6 +13,7 @@ describe('sponsor', () => {
     it('should return empty array if no sponsors', async () => {
       await koaRequest
         .get('/sponsor')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.length.should.equal(0)
@@ -24,6 +26,7 @@ describe('sponsor', () => {
         'luminate_id': '002'})
       await koaRequest
         .get('/sponsor')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(sponsor1.name)
@@ -38,6 +41,7 @@ describe('sponsor', () => {
     it('should return 204 if no sponsor with id=id', async () => {
       await koaRequest
         .get('/sponsor/1')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return sponsor with id=id', async () => {
@@ -45,6 +49,7 @@ describe('sponsor', () => {
         'luminate_id': '001'})
       await koaRequest
         .get('/sponsor/' + sponsor.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(sponsor.name)
@@ -58,6 +63,7 @@ describe('sponsor', () => {
       let body = {'name': 'Blue Shield', 'luminate_id': '003'}
       await koaRequest
         .post('/sponsor')
+        .set('access_token', accessToken)
         .send(body)
         .expect(201)
         .then(response => {
@@ -71,6 +77,7 @@ describe('sponsor', () => {
       await models.db.sponsor.create(sponsor1)
       await koaRequest
         .post('/sponsor')
+        .set('access_token', accessToken)
         .send(duplicateNameReq)
         .expect(400)
     })
@@ -80,6 +87,7 @@ describe('sponsor', () => {
       await models.db.sponsor.create(sponsor1)
       await koaRequest
         .post('/sponsor')
+        .set('access_token', accessToken)
         .send(duplicateLuminateReq)
         .expect(400)
     })
@@ -91,11 +99,13 @@ describe('sponsor', () => {
         'luminate_id': '001'})
       await koaRequest
         .del('/sponsor/' + sponsor.id)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no sponsor with id=id', async () => {
       await koaRequest
         .del('/sponsor/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
         .then(response => {
           response.body.should.equal(0)

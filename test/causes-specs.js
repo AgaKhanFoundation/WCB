@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -14,6 +15,7 @@ describe('causes', () => {
       let c2 = await models.db.cause.create({name: 'c2'})
       await koaRequest
         .get('/causes')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(c1.name)
@@ -26,12 +28,14 @@ describe('causes', () => {
     it('should return 204 if no cause with id=id', async () => {
       await koaRequest
         .get('/causes/1')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return cause with id=id', async () => {
       let c1 = await models.db.cause.create({name: 'c1'})
       await koaRequest
         .get('/causes/' + c1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.name.should.equal(c1.name)
@@ -44,6 +48,7 @@ describe('causes', () => {
       let name = 'c1'
       await koaRequest
         .post('/causes')
+        .set('access_token', accessToken)
         .send({name})
         .expect(201)
         .then(response => {
@@ -54,6 +59,7 @@ describe('causes', () => {
       let c2 = await models.db.cause.create({name: 'c2'})
       await koaRequest
         .post('/causes')
+        .set('access_token', accessToken)
         .send({name: c2.name})
         .expect(409, {'error': {
           'code': 409,
@@ -67,12 +73,14 @@ describe('causes', () => {
       let c1 = await models.db.cause.create({name: 'c1'})
       await koaRequest
         .patch('/causes/' + c1.id)
+        .set('access_token', accessToken)
         .send({name: 'c2'})
         .expect(200, [1])
     })
     it('should return 400 if no cause with id=id', async () => {
       await koaRequest
         .patch('/causes/' + 1)
+        .set('access_token', accessToken)
         .send({name: 'c2'})
         .expect(400, [0])
     })
@@ -81,6 +89,7 @@ describe('causes', () => {
       let c3 = await models.db.cause.create({name: 'c3'})
       await koaRequest
         .patch('/causes/' + c2.id)
+        .set('access_token', accessToken)
         .send({name: c3.name})
         .expect(400, {'error': {
           'code': 400,
@@ -94,11 +103,13 @@ describe('causes', () => {
       let c1 = await models.db.cause.create({name: 'c1'})
       await koaRequest
         .del('/causes/' + c1.id)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no cause with id=id', async () => {
       await koaRequest
         .del('/causes/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
     })
   })

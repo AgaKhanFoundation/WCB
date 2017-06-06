@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -12,6 +13,7 @@ describe('records', () => {
     it('should return 204 if no record with id=id', async () => {
       await koaRequest
         .get('/records/1')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return record with id=id', async () => {
@@ -25,6 +27,7 @@ describe('records', () => {
       })
       await koaRequest
         .get('/records/' + l1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.date.should.be.sameMoment(l1.date)
@@ -45,6 +48,7 @@ describe('records', () => {
       let sourceId = s1.id
       await koaRequest
         .post('/records')
+        .set('access_token', accessToken)
         .send({
           date: date,
           distance: distance,
@@ -70,6 +74,7 @@ describe('records', () => {
       })
       await koaRequest
         .post('/records')
+        .set('access_token', accessToken)
         .send({
           date: l1.date,
           distance: l1.distance,
@@ -95,11 +100,13 @@ describe('records', () => {
       })
       await koaRequest
         .del('/records/' + l1.id)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no record with id=id', async () => {
       await koaRequest
         .del('/records/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
     })
   })

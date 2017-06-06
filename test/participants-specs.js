@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -12,12 +13,14 @@ describe('participants', () => {
     it('should return 204 if no participant with fbid=fbid', async () => {
       await koaRequest
         .get('/participants/1')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return participant with fbid=fbid', async () => {
       let participant = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .get('/participants/' + participant.fbid)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.fbid.should.equal(participant.fbid)
@@ -30,6 +33,7 @@ describe('participants', () => {
       await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/participants/' + p1.fbid)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.fbid.should.equal(p1.fbid)
@@ -46,6 +50,7 @@ describe('participants', () => {
     it('should return 204 if no participant with fbid=fbid', async () => {
       await koaRequest
         .get('/participants/1/stats')
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return sum of distances for participant with fbid=fbid', async () => {
@@ -65,6 +70,7 @@ describe('participants', () => {
       })
       await koaRequest
         .get('/participants/' + p1.fbid + '/stats')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.distance.should.equal(r1.distance + r2.distance)
@@ -77,6 +83,7 @@ describe('participants', () => {
       let fbid = 'p1'
       await koaRequest
         .post('/participants')
+        .set('access_token', accessToken)
         .send({fbid})
         .expect(201)
         .then(response => {
@@ -88,6 +95,7 @@ describe('participants', () => {
       let p2 = await models.db.participant.create({fbid})
       await koaRequest
         .post('/participants')
+        .set('access_token', accessToken)
         .send({fbid})
         .expect(409, {'error': {
           'code': 409,
@@ -102,12 +110,14 @@ describe('participants', () => {
       let t1 = await models.db.team.create({name: 't1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
+        .set('access_token', accessToken)
         .send({team_id: t1.id})
         .expect(200)
     })
     it('should return 400 if no participant with id=id', async () => {
       await koaRequest
         .patch('/participants/' + 1)
+        .set('access_token', accessToken)
         .send({team_id: 1})
         .expect(400, [0])
     })
@@ -115,6 +125,7 @@ describe('participants', () => {
       let p1 = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .patch('/participants/' + p1.fbid)
+        .set('access_token', accessToken)
         .send({team_id: 1})
         .expect(400, {'error': {
           'code': 400,
@@ -128,11 +139,13 @@ describe('participants', () => {
       let participant = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .del('/participants/' + participant.fbid)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no participant with fbid=fbid', async () => {
       await koaRequest
         .del('/participants/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
     })
   })

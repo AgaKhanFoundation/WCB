@@ -2,6 +2,7 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+let accessToken = process.env.ACCESS_TOKEN
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -12,6 +13,7 @@ describe('achievements', () => {
     it('should return empty if no achievements for team with id=team', async () => {
       await koaRequest
         .get('/achievements/team/1')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.should.deep.equal([])
@@ -23,6 +25,7 @@ describe('achievements', () => {
       await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/achievements/team/' + t1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].team_id.should.equal(t1.id)
@@ -35,6 +38,7 @@ describe('achievements', () => {
     it('should return empty if no achievements for achievement with id=achievement', async () => {
       await koaRequest
         .get('/achievements/achievement/1')
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body.should.deep.equal([])
@@ -46,6 +50,7 @@ describe('achievements', () => {
       await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/achievements/achievement/' + a1.id)
+        .set('access_token', accessToken)
         .expect(200)
         .then(response => {
           response.body[0].team_id.should.equal(t1.id)
@@ -60,6 +65,7 @@ describe('achievements', () => {
       let a1 = await models.db.achievement.create({name: 'London', distance: 100})
       await koaRequest
         .post('/achievements')
+        .set('access_token', accessToken)
         .send({team_id: t1.id, achievement_id: a1.id})
         .expect(201)
         .then(response => {
@@ -73,6 +79,7 @@ describe('achievements', () => {
       let achievements = await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .post('/achievements')
+        .set('access_token', accessToken)
         .send({team_id: achievements.team_id, achievement_id: achievements.achievement_id})
         .expect(409, {'error': {
           'code': 409,
@@ -90,12 +97,14 @@ describe('achievements', () => {
       let achievements = await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .patch('/achievements/' + achievements.id)
+        .set('access_token', accessToken)
         .send({team_id: t2.id, achievement_id: a2.id})
         .expect(200, [1])
     })
     it('should return 400 if no achievements with id=id', async () => {
       await koaRequest
         .patch('/achievements/' + 1)
+        .set('access_token', accessToken)
         .send({team_id: 1})
         .expect(400, [0])
     })
@@ -108,6 +117,7 @@ describe('achievements', () => {
       await models.db.achievements.create({team_id: t2.id, achievement_id: a2.id})
       await koaRequest
         .patch('/achievements/' + achievements1.id)
+        .set('access_token', accessToken)
         .send({team_id: t2.id, achievement_id: a2.id})
         .expect(400, {'error': {
           'code': 400,
@@ -123,11 +133,13 @@ describe('achievements', () => {
       let achievements = await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .del('/achievements/' + achievements.id)
+        .set('access_token', accessToken)
         .expect(204)
     })
     it('should return 400 if no achievements with id=id', async () => {
       await koaRequest
         .del('/achievements/' + 0)
+        .set('access_token', accessToken)
         .expect(400)
     })
   })

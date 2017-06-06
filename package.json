@@ -12,8 +12,8 @@
     "migrate": "sequelize --options-path config/sequelize.json db:migrate",
     "migrate:undo": "sequelize --options-path config/sequelize.json db:migrate:undo",
     "start": "node .",
-    "start-dev": "NODE_ENV=development nodemon .",
-    "test": "NODE_ENV=test istanbul cover --report lcovonly _mocha --recursive"
+    "start-dev": "NODE_ENV=development ACCESS_TOKEN=test nodemon .",
+    "test": "NODE_ENV=test ACCESS_TOKEN=test istanbul cover --report lcovonly _mocha --recursive"
   },
   "repository": {
     "type": "git",
