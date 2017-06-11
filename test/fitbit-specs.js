@@ -48,6 +48,16 @@ describe('fitbit', () => {
         })
     })
   })
+  context('GET /fitbit', () => {
+    it('should return empty list when no fitbit users exists', async () => {
+      await koaRequest
+        .get('/fitbit')
+        .expect(200)
+        .then(response => {
+          response.body.length.should.equal(0)
+        })
+    })
+  })
 
   context('POST /fitbit', () => {
     it('should create fitbit user', async () => {
@@ -113,6 +123,23 @@ describe('fitbit', () => {
       await koaRequest
         .del('/fitbit/' + 0)
         .expect(400)
+    })
+  })
+  context('Fetch data from fitbit api', () => {
+    it('should create fitbit user', async () => {
+      let time1 = moment().format('YYYY-MM-DD HH:mm:ss')
+      let user1 = {
+        'fitbit_id': '5NBCMX',
+        'access_token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1TkJDTVgiLCJhdWQiOiIyMjg5SzUiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyd2VpIHJhY3QgcnBybyIsImV4cCI6MTQ5NDIxNDA0MywiaWF0IjoxNDk0MTg1MjQzfQ.KHCBPMKjrhLG2u5MTMW3TbyDrsrAFJrIS3VmZpLOevY',
+        'refresh_token': 'd8a0eb5a20003a9db5668d94f79f4c33db374ec74101ac3f8426a5f02f14af3b'
+      }
+      let participant1 = await models.db.participant.create({fbid: 'p1'})
+      user1.expires_at = time1
+      user1.participant_id = participant1.id
+      let fitbit = await models.db.fitbit.create(user1)
+      await koaRequest
+        .get('/fitbit/' + fitbit.id + '/updateData')
+        .expect(200)
     })
   })
 })
