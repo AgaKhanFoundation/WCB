@@ -1,6 +1,4 @@
 module.exports = {
-  'migrations-path': 'lib/migrations',
-  'models-path': 'lib/models',
   'database': 'wcb',
   'host': 'localhost',
   'dialect': 'mysql',
