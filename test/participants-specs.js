@@ -27,7 +27,7 @@ describe('participants', () => {
       let t1 = await models.db.team.create({name: 't1'})
       let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
       let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
-      await models.db.achievements.create({team_id: t1.id, achievement_id: a1.id})
+      await models.db.team_achievement.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/participants/' + p1.fbid)
         .expect(200)
