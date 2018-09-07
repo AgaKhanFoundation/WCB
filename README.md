@@ -6,7 +6,7 @@ Work in progress!
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) v7.7.2
+- [Node.js](https://nodejs.org) v10.9.0
 
 ## Development
 

@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "7.7.2"
+  - "10.9.0"
 
 script:
   - npm run lint
