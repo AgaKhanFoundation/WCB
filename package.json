@@ -13,7 +13,7 @@
     "migrate:undo": "sequelize --options-path config/sequelize.json db:migrate:undo",
     "start": "node .",
     "start-dev": "NODE_ENV=development nodemon .",
-    "test": "NODE_ENV=test istanbul cover --report lcovonly _mocha --recursive"
+    "test": "NODE_ENV=test nyc mocha --recursive"
   },
   "repository": {
     "type": "git",
@@ -34,21 +34,23 @@
     "koa-router": "^7.4.0",
     "mysql": "^2.16.0",
     "sequelize": "^4.38.0",
-    "sequelize-cli": "^4.0.0",
+    "sequelize-cli": "^4.1.1",
     "sqlite3": "^4.0.2"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "chai-moment": "^0.1.0",
-    "coveralls": "^2.13.1",
-    "eslint": "^3.17.1",
-    "eslint-config-standard": "^7.0.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^2.1.1",
-    "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^3.2.0",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.5.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
-    "supertest": "^3.2.0"
+    "nyc": "^13.0.1",
+    "supertest": "^3.3.0"
   }
 }
