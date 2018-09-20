@@ -49,4 +49,3 @@ jobs:
       if: branch = master AND ( type IN (push) OR type IN (pull_request) )
       after_success:
         - helm install wcb_dev --name wcb_dev_${TRAVIS_BRANCH}_${TRAVIS_BUILD_NUMBER}
-
