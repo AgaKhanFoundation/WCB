@@ -1,0 +1,10 @@
+version: '3'
+services:
+  base_image:
+    build: .
+    image:
+     - name:
+    expose:
+     - "7777"
+  redis:
+    image: "redis:alpine"
