@@ -3,7 +3,30 @@ language: node_js
 node_js:
   - "10.9.0"
 
-script:
-  - npm run lint
-  - npm test
-  - ./node_modules/.bin/nyc report --reporter text-lcov | ./node_modules/.bin/coveralls
+git:
+  depth: 1
+
+jobs:
+  include:
+    - stage: unit_test
+      script:
+        - npm run lint
+        - npm test
+        - ./node_modules/.bin/nyc report --reporter text-lcov | ./node_modules/.bin/coveralls
+    - stage: build
+      script:
+        - docker-compose -f docker-compose.yaml build
+
+    - stage: push_aritifact
+      script:
+        -  docker-compose -f docker-compose.yaml push
+
+    - stage: functional_test
+      script:
+        - helm install wcb_dev --name wcb_dev_${BUILD_NUMBER}
+        - helm inspect wcb_dev_${BUILD_NUMBER}
+
+    - stage: deploy
+      script:
+        - helm install wcb_dev --name wcb_dev_${BUILD_NUMBER}
+
