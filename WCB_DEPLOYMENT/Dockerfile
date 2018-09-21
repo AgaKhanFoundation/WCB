@@ -23,4 +23,4 @@ RUN npm prune --production --silent
 
 # Command to run the app
 
-CMD [ "./start.sh" ]
+ENTRYPOINT bash -c "./start.sh"

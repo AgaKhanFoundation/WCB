@@ -1,10 +1,55 @@
 version: '3'
 services:
-  base_image:
-    build: .
-    image:
-     - name:
-    expose:
-     - "7777"
-  redis:
-    image: "redis:alpine"
+#  base_image:
+#    build:
+#      context: .
+#      dockerfile: WCB_DEPLOYMENT/DockerfileBase
+#    container_name: base_image
+#    image: quay.io/nidhisd/wcb_base:${TRAVIS_BUILD_NUMBER}
+#  test_image:
+#      build:
+#        context: .
+#        dockerfile: WCB_DEPLOYMENT/DockerfileTest
+#      container_name: test_image
+#      networks:
+#        wcb_api:
+#          ipv4_address: 172.16.239.22
+  deploy_image:
+      build:
+        context: .
+        dockerfile: WCB_DEPLOYMENT/DockerfileDeploy
+      ports:
+        - "7777:7777"
+      image: quay.io/nidhisd/wcb_${TRAVIS_BRANCH}:${TRAVIS_BUILD_NUMBER}
+      container_name: wcb_backend
+      networks:
+        disagg_api:
+          ipv4_address: 172.16.239.24
+      healthcheck:
+        test: ["CMD", "curl", "-f", "localhost:7777"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+      cpu_shares: 10
+      mem_limit: 50m
+      restart: on-failure
+  mysql:
+    image: "mysql:8.0"
+    ports:
+      - "8080:8080"
+    container_name: wcb_mysql
+    networks:
+      disagg_api:
+        ipv4_address: 172.16.239.24
+    cpu_shares: 20
+    mem_limit: 50m
+    restart: on-failure
+
+networks:
+  wcb_api:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.239.0/24
+
