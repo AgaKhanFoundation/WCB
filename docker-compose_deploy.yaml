@@ -1,0 +1,42 @@
+version: '3'
+services:
+  wcb_backend:
+      ports:
+        - "7777:8080"
+      image: quay.io/nidhisd/wcb_${TRAVIS_BRANCH}:${TRAVIS_BUILD_NUMBER}
+      container_name: wcb_backend
+      networks:
+        wcb_api:
+          ipv4_address: 172.16.239.22
+      healthcheck:
+        test: ["CMD", "curl", "-f", "localhost:7777"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+      #cpu_shares: 10
+      #mem_limit: 50m
+      restart: on-failure
+      links:
+        - mysql
+  mysql:
+    image: "mysql:8.0"
+    ports:
+      - "3306:8080"
+    container_name: mysql
+    networks:
+      wcb_api:
+        ipv4_address: 172.16.239.24
+    #cpu_shares: 20
+    #mem_limit: 50m
+    environment:
+      MYSQL_ROOT_PASSWORD: wcb_backend
+    restart: on-failure
+
+networks:
+  wcb_api:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.239.0/24
+

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  wcb_backend:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "7777:8080"
+      image: quay.io/nidhisd/wcb_${TRAVIS_BRANCH}:${TRAVIS_BUILD_NUMBER}
