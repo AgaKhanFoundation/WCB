@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "engines": {
-    "node": ">=10.9.0"
+    "node": ">=10.16.3"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
