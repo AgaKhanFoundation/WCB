@@ -129,24 +129,28 @@ describe('teams', () => {
   context('POST /teams', () => {
     it('should create team with name=name', async () => {
       let name = 't1'
+      let p1 = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .post('/teams')
-        .send({name})
+        .send({name, creator_id: p1.fbid})
         .expect(201)
         .then(response => {
           response.body.name.should.equal(name)
+          response.body.creator_id.should.equal(p1.fbid)
         })
     })
     it('should create team with name=name and image=image', async () => {
       let name = 't1'
       let image = 'i1'
+      let p1 = await models.db.participant.create({fbid: 'p1'})
       await koaRequest
         .post('/teams')
-        .send({name, image})
+        .send({name, image, creator_id: p1.fbid})
         .expect(201)
         .then(response => {
           response.body.name.should.equal(name)
           response.body.image.should.equal(image)
+          response.body.creator_id.should.equal(p1.fbid)
         })
     })
     it('should return 409 if team name conflict', async () => {
@@ -157,6 +161,28 @@ describe('teams', () => {
         .expect(409, {'error': {
           'code': 409,
           'message': `team named "${t2.name}" already exists`
+        }})
+    })
+    it('should return 400 if creator_id not specified', async () => {
+      let name = 't1'
+      let fbid = 'undefined'
+      await koaRequest
+        .post('/teams')
+        .send({name})
+        .expect(400, {'error': {
+          'code': 400,
+          'message': `participant with fbid "${fbid}" does not exist`
+        }})
+    })
+    it('should return 400 if creator does not exist', async () => {
+      let name = 't1'
+      let fbid = 'p1'
+      await koaRequest
+        .post('/teams')
+        .send({name, creator_id: fbid})
+        .expect(400, {'error': {
+          'code': 400,
+          'message': `participant with fbid "${fbid}" does not exist`
         }})
     })
   })
