@@ -18,6 +18,8 @@ ENTITIES = {
     'achievements': ['achievements', ('team', 'achievement'), ('team_id', 'achievement_id'),
                      ('id',), ('id',)],
     'cause': ['causes', ('', 'id'), ('name',), ('id',), ('id',)],
+    'commitments': ['commitments', ('participant', 'event'), ('participant_id', 'event_id',
+                    'commitment'), ('id',), ('id',)],
     'donor': ['donor', (), (), (), ()],
     'donors': ['donors', (), (), (), ()],
     'event': ['events', ('', 'id'), ('name', 'description', 'start_date', 'end_date', 'team_limit',
@@ -75,6 +77,23 @@ def get(entity, endpoint, action, url, args):
         else:
             print('Query achievements with "team_id=<team_id>" \
                    or "achievement_id=<achievement_id>"')
+            return None
+
+        return urllib2.Request(url)
+
+    if entity == 'commitments':
+        if not args:
+            print('Query commitments with "participant_id=<participant_id>" \
+                   or "event_id=<event_id>"')
+            return None
+
+        if args[0].startswith('participant'):
+            url += '/participant/{}'.format(args[0].split('=')[1])
+        elif args[0].startswith('event'):
+            url += '/event/{}'.format(args[0].split('=')[1])
+        else:
+            print('Query commitments with "participant_id=<participant_id>" \
+                   or "event_id=<event_id>"')
             return None
 
         return urllib2.Request(url)
