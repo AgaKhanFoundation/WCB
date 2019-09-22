@@ -8,17 +8,23 @@ beforeEach(function syncDB () {
 })
 
 describe('commitments', () => {
-  context('GET /commitments/participant/:participant', () => {
-    it('should return empty if no commitments for participant with id=participant', async () => {
+  context('GET /commitments/participant/:fbid', () => {
+    it('should return 204 if no participant found with fbid=fbid', async () => {
       await koaRequest
-        .get('/commitments/participant/1')
+        .get('/commitments/participant/p0')
+        .expect(204)
+    })
+    it('should return empty if no commitments for participant with fbid=fbid', async () => {
+      await models.db.participant.create({fbid: 'p1'})
+      await koaRequest
+        .get('/commitments/participant/p1')
         .expect(200)
         .then(response => {
           response.body.should.deep.equal([])
         })
     })
-    it('should return commitments for participant with id=participant', async () => {
-      let p1 = await models.db.participant.create({fbid: 'p1'})
+    it('should return commitments for participant with fbid=fbid', async () => {
+      let p2 = await models.db.participant.create({fbid: 'p2'})
       let e1 = await models.db.event.create({
         name: 'e1',
         image: 'i1',
@@ -29,12 +35,12 @@ describe('commitments', () => {
         team_building_start: '2017-01-01T00:00:00Z',
         team_building_end: '2017-01-31T00:00:00Z'
       })
-      await models.db.participant_event.create({participant_id: p1.id, event_id: e1.id, commitment: 100000})
+      await models.db.participant_event.create({participant_id: p2.id, event_id: e1.id, commitment: 100000})
       await koaRequest
-        .get('/commitments/participant/' + p1.id)
+        .get('/commitments/participant/p2')
         .expect(200)
         .then(response => {
-          response.body[0].participant_id.should.equal(p1.id)
+          response.body[0].participant_id.should.equal(p2.id)
           response.body[0].event_id.should.equal(e1.id)
           response.body[0].commitment.should.equal(100000)
         })
