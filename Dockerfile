@@ -24,4 +24,4 @@ EXPOSE 7777
 
 # Command to run the app
 
-CMD [ "./start.sh" ]
+CMD [ "npm", "run", "start"]
