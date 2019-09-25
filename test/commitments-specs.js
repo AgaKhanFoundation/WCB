@@ -75,6 +75,22 @@ describe('commitments', () => {
   })
 
   context('POST /commitments', () => {
+    it('should return 400 if participant is not found', async () => {
+      let e1 = await models.db.event.create({
+        name: 'e1',
+        image: 'i1',
+        description: 'event 1',
+        start_date: '2017-02-01T00:00:00Z',
+        end_date: '2017-12-31T00:00:00Z',
+        team_limit: 10,
+        team_building_start: '2017-01-01T00:00:00Z',
+        team_building_end: '2017-01-31T00:00:00Z'
+      })
+      await koaRequest
+        .post('/commitments')
+        .send({fbid: 'p1', event_id: e1.id, commitment: 100000})
+        .expect(400)
+    })
     it('should create commitments with participant=participant and event=event', async () => {
       let p1 = await models.db.participant.create({fbid: 'p1'})
       let e1 = await models.db.event.create({
@@ -89,7 +105,7 @@ describe('commitments', () => {
       })
       await koaRequest
         .post('/commitments')
-        .send({participant_id: p1.id, event_id: e1.id, commitment: 100000})
+        .send({fbid: p1.fbid, event_id: e1.id, commitment: 100000})
         .expect(201)
         .then(response => {
           response.body.participant_id.should.equal(p1.id)
@@ -112,10 +128,10 @@ describe('commitments', () => {
       let commitments = await models.db.participant_event.create({participant_id: p1.id, event_id: e1.id, commitment: 100000})
       await koaRequest
         .post('/commitments')
-        .send({participant_id: commitments.participant_id, event_id: commitments.event_id})
+        .send({fbid: p1.fbid, event_id: commitments.event_id})
         .expect(409, {'error': {
           'code': 409,
-          'message': `commitments for participant="${commitments.participant_id}" and event="${commitments.event_id}" already exist`
+          'message': `commitments for participant with fbid="${p1.fbid}" and event="${commitments.event_id}" already exist`
         }})
     })
   })
