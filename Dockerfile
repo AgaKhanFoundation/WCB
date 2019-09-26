@@ -11,9 +11,6 @@ COPY . /usr/src/app
 
 RUN npm install --silent
 
-# Run tests and Lint
-RUN npm run test && npm run lint
-
 # Remove dev dependencies
 RUN npm prune --production --silent
 
