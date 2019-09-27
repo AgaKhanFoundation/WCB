@@ -18,7 +18,7 @@ ENTITIES = {
     'achievements': ['achievements', ('team', 'achievement'), ('team_id', 'achievement_id'),
                      ('id',), ('id',)],
     'cause': ['causes', ('', 'id'), ('name',), ('id',), ('id',)],
-    'commitments': ['commitments', ('participant', 'event'), ('participant_id', 'event_id',
+    'commitments': ['commitments', ('participant', 'event'), ('fbid', 'event_id',
                     'commitment'), ('id',), ('id',)],
     'donor': ['donor', (), (), (), ()],
     'donors': ['donors', (), (), (), ()],
@@ -83,8 +83,7 @@ def get(entity, endpoint, action, url, args):
 
     if entity == 'commitments':
         if not args:
-            print('Query commitments with "participant_id=<participant_id>" \
-                   or "event_id=<event_id>"')
+            print('Query commitments with "fbid=<fbid>" or "event_id=<event_id>"')
             return None
 
         if args[0].startswith('participant'):
@@ -92,8 +91,7 @@ def get(entity, endpoint, action, url, args):
         elif args[0].startswith('event'):
             url += '/event/{}'.format(args[0].split('=')[1])
         else:
-            print('Query commitments with "participant_id=<participant_id>" \
-                   or "event_id=<event_id>"')
+            print('Query commitments with "fbid=<fbid>" or "event_id=<event_id>"')
             return None
 
         return urllib2.Request(url)
