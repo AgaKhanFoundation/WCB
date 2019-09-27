@@ -105,6 +105,14 @@ describe('participants', () => {
         .send({team_id: t1.id})
         .expect(200)
     })
+    it('should unset team for participant with fbid=fbid', async () => {
+      let t1 = await models.db.team.create({name: 't1'})
+      let p1 = await models.db.participant.create({fbid: 'p1', team_id: t1.id})
+      await koaRequest
+        .patch('/participants/' + p1.fbid)
+        .send({team_id: 'null'})
+        .expect(200)
+    })
     it('should return 400 if no participant with id=id', async () => {
       await koaRequest
         .patch('/participants/' + 1)
