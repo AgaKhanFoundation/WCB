@@ -113,7 +113,23 @@ describe('participants', () => {
         .send({team_id: 'null'})
         .expect(200)
     })
-    it('should return 400 if no participant with id=id', async () => {
+    it('should unset source for participant with fbid=fbid', async () => {
+      let s1 = await models.db.source.create({name: 's1'})
+      let p1 = await models.db.participant.create({fbid: 'p1', source_id: s1.id})
+      await koaRequest
+        .patch('/participants/' + p1.fbid)
+        .send({source_id: 'null'})
+        .expect(200)
+    })
+    it('should unset cause for participant with fbid=fbid', async () => {
+      let c1 = await models.db.cause.create({name: 'c1'})
+      let p1 = await models.db.participant.create({fbid: 'p1', cause_id: c1.id})
+      await koaRequest
+        .patch('/participants/' + p1.fbid)
+        .send({cause_id: 'null'})
+        .expect(200)
+    })
+    it('should return 400 if no participant with fbid=fbid', async () => {
       await koaRequest
         .patch('/participants/' + 1)
         .send({team_id: 1})
