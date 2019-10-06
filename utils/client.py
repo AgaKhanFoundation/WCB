@@ -23,7 +23,7 @@ ENTITIES = {
     'donor': ['donor', (), (), (), ()],
     'donors': ['donors', (), (), (), ()],
     'event': ['events', ('', 'id'), ('name', 'description', 'start_date', 'end_date', 'team_limit',
-                                     'team_building_start', 'team_building_end'), ('id',),
+                                     'team_building_start', 'team_building_end', 'default_steps'), ('id',),
               ('id',)],
     'locality': ['localities', ('', 'id'), ('name',), ('id',), ('id',)],
     'participant': ['participants', ('fbid',), ('fbid',), ('fbid',), ('fbid',)],

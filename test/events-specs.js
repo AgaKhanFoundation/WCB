@@ -18,7 +18,8 @@ describe('events', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let e2 = await models.db.event.create({
         name: 'e2',
@@ -28,7 +29,8 @@ describe('events', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await koaRequest
         .get('/events')
@@ -42,6 +44,7 @@ describe('events', () => {
           response.body[0].team_limit.should.equal(e1.team_limit)
           response.body[0].team_building_start.should.be.sameMoment(e1.team_building_start)
           response.body[0].team_building_end.should.be.sameMoment(e1.team_building_end)
+          response.body[0].default_steps.should.be.equal(e1.default_steps)
           response.body[1].name.should.equal(e2.name)
           response.body[1].image.should.equal(e2.image)
           response.body[1].description.should.equal(e2.description)
@@ -50,6 +53,7 @@ describe('events', () => {
           response.body[1].team_limit.should.equal(e2.team_limit)
           response.body[1].team_building_start.should.be.sameMoment(e2.team_building_start)
           response.body[1].team_building_end.should.be.sameMoment(e2.team_building_end)
+          response.body[1].default_steps.should.be.equal(e2.default_steps)
         })
     })
   })
@@ -69,7 +73,8 @@ describe('events', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await koaRequest
         .get('/events/' + e1.id)
@@ -83,6 +88,7 @@ describe('events', () => {
           response.body.team_limit.should.equal(e1.team_limit)
           response.body.team_building_start.should.be.sameMoment(e1.team_building_start)
           response.body.team_building_end.should.be.sameMoment(e1.team_building_end)
+          response.body.default_steps.should.be.equal(e1.default_steps)
         })
     })
   })
@@ -97,6 +103,7 @@ describe('events', () => {
       let teamLimit = 10
       let teamBuildingStart = '2017-01-01T00:00:00Z'
       let teamBuildingEnd = '2017-01-31T00:00:00Z'
+      let defaultSteps = 10000
       await koaRequest
         .post('/events')
         .send({
@@ -107,7 +114,8 @@ describe('events', () => {
           end_date: endDate,
           team_limit: teamLimit,
           team_building_start: teamBuildingStart,
-          team_building_end: teamBuildingEnd
+          team_building_end: teamBuildingEnd,
+          default_steps: defaultSteps
         })
         .expect(201)
         .then(response => {
@@ -119,6 +127,7 @@ describe('events', () => {
           response.body.team_limit.should.equal(teamLimit)
           response.body.team_building_start.should.be.sameMoment(teamBuildingStart)
           response.body.team_building_end.should.be.sameMoment(teamBuildingEnd)
+          response.body.default_steps.should.be.equal(defaultSteps)
         })
     })
     it('should return 409 if event name conflict', async () => {
@@ -130,6 +139,7 @@ describe('events', () => {
       let teamLimit = 10
       let teamBuildingStart = '2017-01-01T00:00:00Z'
       let teamBuildingEnd = '2017-01-31T00:00:00Z'
+      let defaultSteps = 10000
       let e1 = await models.db.event.create({
         name,
         image,
@@ -138,7 +148,8 @@ describe('events', () => {
         end_date: endDate,
         team_limit: teamLimit,
         team_building_start: teamBuildingStart,
-        team_building_end: teamBuildingEnd
+        team_building_end: teamBuildingEnd,
+        default_steps: defaultSteps
       })
       await koaRequest
         .post('/events')
@@ -150,7 +161,8 @@ describe('events', () => {
           end_date: '2018-12-31T00:00:00Z',
           team_limit: teamLimit,
           team_building_start: '2018-01-01T00:00:00Z',
-          team_building_end: '2018-01-31T00:00:00Z'
+          team_building_end: '2018-01-31T00:00:00Z',
+          default_steps: defaultSteps
         })
         .expect(409, {'error': {
           'code': 409,
@@ -160,7 +172,7 @@ describe('events', () => {
   })
 
   context('PATCH /events/:id', () => {
-    it('should change event name, image, description, start_date, end_date, team_limit, team_building_start, team_building_end', async () => {
+    it('should change event name, image, description, start_date, end_date, team_limit, team_building_start, team_building_end, default_steps', async () => {
       let e1 = await models.db.event.create({
         name: 'e1',
         image: 'i1',
@@ -169,7 +181,8 @@ describe('events', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await koaRequest
         .patch('/events/' + e1.id)
@@ -181,7 +194,8 @@ describe('events', () => {
           endDate: '2018-12-31T00:00:00Z',
           teamLimit: 20,
           teamBuildingStart: '2018-01-01T00:00:00Z',
-          teamBuildingEnd: '2018-01-31T00:00:00Z'
+          teamBuildingEnd: '2018-01-31T00:00:00Z',
+          default_steps: 20000
         })
         .expect(200, [1])
     })
@@ -200,7 +214,8 @@ describe('events', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let e3 = await models.db.event.create({
         name: 'e3',
@@ -210,7 +225,8 @@ describe('events', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await koaRequest
         .patch('/events/' + e2.id)
@@ -232,7 +248,8 @@ describe('events', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await koaRequest
         .del('/events/' + e1.id)

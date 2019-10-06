@@ -33,7 +33,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await models.db.participant_event.create({participant_id: p2.id, event_id: e1.id, commitment: 100000})
       await koaRequest
@@ -66,7 +67,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await models.db.participant_event.create({participant_id: p1.id, event_id: e1.id, commitment: 100000})
       await koaRequest
@@ -90,7 +92,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await koaRequest
         .post('/commitments')
@@ -107,7 +110,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       await koaRequest
         .post('/commitments')
@@ -129,7 +133,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let commitments = await models.db.participant_event.create({participant_id: p1.id, event_id: e1.id, commitment: 100000})
       await koaRequest
@@ -154,7 +159,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let e2 = await models.db.event.create({
         name: 'e2',
@@ -164,7 +170,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let commitments = await models.db.participant_event.create({participant_id: p1.id, event_id: e1.id})
       await koaRequest
@@ -189,7 +196,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let e2 = await models.db.event.create({
         name: 'e2',
@@ -199,7 +207,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let commitments1 = await models.db.participant_event.create({participant_id: p1.id, event_id: e1.id})
       await models.db.participant_event.create({participant_id: p2.id, event_id: e2.id})
@@ -224,7 +233,8 @@ describe('commitments', () => {
         end_date: '2017-12-31T00:00:00Z',
         team_limit: 10,
         team_building_start: '2017-01-01T00:00:00Z',
-        team_building_end: '2017-01-31T00:00:00Z'
+        team_building_end: '2017-01-31T00:00:00Z',
+        default_steps: 10000
       })
       let commitments = await models.db.participant_event.create({participant_id: p1.id, event_id: e1.id})
       await koaRequest
