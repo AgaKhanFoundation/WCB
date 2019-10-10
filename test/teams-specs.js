@@ -11,15 +11,21 @@ describe('teams', () => {
   context('GET /teams', () => {
     it('should return teams', async () => {
       let t1 = await models.db.team.create({name: 't1', image: 'i1'})
-      let t2 = await models.db.team.create({name: 't2', image: 'i2'})
+      let t2 = await models.db.team.create({name: 't2', image: 'i2', hidden: true})
+      let t3 = await models.db.team.create({name: 't3', image: 'i3', hidden: false})
       await koaRequest
         .get('/teams')
         .expect(200)
         .then(response => {
           response.body[0].name.should.equal(t1.name)
           response.body[0].image.should.equal(t1.image)
+          response.body[0].hidden.should.equal(t1.hidden)
           response.body[1].name.should.equal(t2.name)
           response.body[1].image.should.equal(t2.image)
+          response.body[1].hidden.should.equal(t2.hidden)
+          response.body[2].name.should.equal(t3.name)
+          response.body[2].image.should.equal(t3.image)
+          response.body[2].hidden.should.equal(t3.hidden)
         })
     })
     it('should return teams with participants', async () => {
@@ -64,6 +70,7 @@ describe('teams', () => {
         .then(response => {
           response.body.name.should.equal(t1.name)
           response.body.image.should.equal(t1.image)
+          response.body.hidden.should.equal(false)
         })
     })
     it('should return team with id=id with participants', async () => {
@@ -139,18 +146,20 @@ describe('teams', () => {
           response.body.creator_id.should.equal(p1.fbid)
         })
     })
-    it('should create team with name=name and image=image', async () => {
+    it('should create team with name=name, image=image, and hidden=hidden', async () => {
       let name = 't1'
       let image = 'i1'
       let p1 = await models.db.participant.create({fbid: 'p1'})
+      let hidden = true
       await koaRequest
         .post('/teams')
-        .send({name, image, creator_id: p1.fbid})
+        .send({name, image, creator_id: p1.fbid, hidden})
         .expect(201)
         .then(response => {
           response.body.name.should.equal(name)
           response.body.image.should.equal(image)
           response.body.creator_id.should.equal(p1.fbid)
+          response.body.hidden.should.equal(hidden)
         })
     })
     it('should return 409 if team name conflict', async () => {
@@ -193,6 +202,13 @@ describe('teams', () => {
       await koaRequest
         .patch('/teams/' + t1.id)
         .send({name: 't2'})
+        .expect(200, [1])
+    })
+    it('should change team privacy', async () => {
+      let t1 = await models.db.team.create({name: 't1', hidden: true})
+      await koaRequest
+        .patch('/teams/' + t1.id)
+        .send({hidden: false})
         .expect(200, [1])
     })
     it('should return 400 if no team with id=id', async () => {
