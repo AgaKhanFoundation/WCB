@@ -32,7 +32,7 @@ ENTITIES = {
     'source': ['sources', ('', 'id'), ('name',), ('id',), ('id',)],
     'sponsor': ['sponsor', (), (), (), ()],
     'sponsors': ['sponsors', (), (), (), ()],
-    'team': ['teams', ('', 'id'), ('name', 'creator_id'), ('id',), ('id',)],
+    'team': ['teams', ('', 'id'), ('name', 'creator_id', 'hidden'), ('id',), ('id',)],
 }
 
 CRUD = {
