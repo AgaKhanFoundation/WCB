@@ -23,8 +23,8 @@ ENTITIES = {
     'donor': ['donor', (), (), (), ()],
     'donors': ['donors', (), (), (), ()],
     'event': ['events', ('', 'id'), ('name', 'description', 'start_date', 'end_date', 'team_limit',
-                                     'team_building_start', 'team_building_end'), ('id',),
-              ('id',)],
+                                     'team_building_start', 'team_building_end', 'default_steps'),
+               ('id',), ('id',)],
     'locality': ['localities', ('', 'id'), ('name',), ('id',), ('id',)],
     'participant': ['participants', ('fbid',), ('fbid',), ('fbid',), ('fbid',)],
     'record': ['records', ('id',), ('date', 'distance', 'participant_id', 'source_id'), (),
@@ -135,6 +135,7 @@ def patch(entity, endpoint, action, url, args):
         return None
 
     data = dict(arg.split('=') for arg in args)
+    data = {k: None if v == 'null' else v for k, v in data.items()} # clear 'null' params
     req = urllib2.Request(url)
     req.add_data(json.dumps(data))
     return req
