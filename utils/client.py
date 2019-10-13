@@ -47,8 +47,8 @@ CRUD = {
 
 def construct_url(endpoint):
     """Build a URL from the scheme, server, and port parameters."""
-    scheme = os.environ.get('SCHEME', 'http')
-    domain = os.environ.get('SERVER', 'akf-causes.subshell.org')
+    scheme = os.environ.get('SCHEME', 'https')
+    domain = os.environ.get('SERVER', 'dev.step4change.org')
     port = os.environ.get('PORT', '')
     if port:
         netloc = '{}:{}'.format(domain, port)
