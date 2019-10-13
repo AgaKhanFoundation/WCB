@@ -135,6 +135,7 @@ def patch(entity, endpoint, action, url, args):
         return None
 
     data = dict(arg.split('=') for arg in args)
+    data = {k: None if v == 'null' else v for k, v in data.items()} # clear 'null' params
     req = urllib2.Request(url)
     req.add_data(json.dumps(data))
     return req
