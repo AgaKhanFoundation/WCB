@@ -38,8 +38,7 @@
     "mysql2": "^1.7.0",
     "sequelize": "^4.44.3",
     "sequelize-cli": "^5.5.1",
-    "sqlite3": "^4.1.0",
-    "superagent-defaults": "^0.1.14"
+    "sqlite3": "^4.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
@@ -55,6 +54,7 @@
     "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
     "nyc": "^14.1.1",
+    "superagent-defaults": "^0.1.14",
     "supertest": "^3.3.0"
   }
 }
