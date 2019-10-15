@@ -4,6 +4,7 @@
 """
 
 from __future__ import print_function
+from base64 import b64encode
 
 import argparse
 import json
@@ -182,6 +183,12 @@ def main():
     if not req:
         return
 
+    with open('.env') as dotenv:
+        for line in dotenv:
+            if line.startswith('SERVER_PASSWORD='):
+                password = line.strip('SERVER_PASSWORD=').strip()
+    token = b64encode(':{}'.format(os.environ.get('SERVER_PASSWORD', password)))
+    req.add_header('Authorization', 'basic {}'.format(token))
     req.add_header('Content-Type', 'application/json')
     req.get_method = lambda: action
     try:
