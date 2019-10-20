@@ -27,6 +27,8 @@ steps:
     command: 'custom'
     customCommand: 'run lint'
 - task: Npm@1
+  env:
+    SERVER_PASSWORD: '$(APPLICATION_SECRET)'
   inputs:
     command: 'custom'
     customCommand: 'test'
