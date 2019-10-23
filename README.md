@@ -11,6 +11,7 @@ Work in progress!
 ## Development
 
 ```
+echo "SERVER_PASSWORD=<password>" >> .env
 npm install
 npm run lint
 npm test

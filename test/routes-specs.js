@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 
 const chai = require('chai')
+const defaults = require('superagent-defaults')
 const request = require('supertest')
 const http = require('http')
 const server = require('../lib/server.js')
@@ -10,7 +11,8 @@ chai.should()
 chai.use(require('chai-as-promised'))
 chai.use(require('chai-moment'))
 
-const koaRequest = request(http.createServer(server.callback()))
+const koaRequest = defaults(request(http.createServer(server.callback())))
+koaRequest.auth(null, process.env.SERVER_PASSWORD)
 
 describe('routes', () => {
   context('GET /', () => {
