@@ -5,4 +5,4 @@ jobs:
       - image: circleci/node:10.16.3
     steps:
       - checkout
-      - run: echo "A first hello"
+      - run: make lint
