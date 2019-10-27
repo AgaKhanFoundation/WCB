@@ -27,7 +27,7 @@ describe('participants', () => {
     it('should return participant with fbid=fbid including team, participants, and achievements', async () => {
       let t1 = await models.db.team.create({name: 't1'})
       let p1 = await models.db.participant.create({fbid: 'p1', registered: true, team_id: t1.id})
-      let a1 = await models.db.achievement.create({name: 'a1', distance: 1})
+      let a1 = await models.db.achievement.create({sequence: 1, name: 'a1', distance: 1})
       await models.db.team_achievement.create({team_id: t1.id, achievement_id: a1.id})
       await koaRequest
         .get('/participants/' + p1.fbid)
@@ -38,6 +38,7 @@ describe('participants', () => {
           response.body.team_id.should.equal(t1.id)
           response.body.team.name.should.equal(t1.name)
           response.body.team.participants[0].fbid.should.equal(p1.fbid)
+          response.body.team.achievements[0].sequence.should.equal(a1.sequence)
           response.body.team.achievements[0].name.should.equal(a1.name)
           response.body.team.achievements[0].distance.should.equal(a1.distance)
         })

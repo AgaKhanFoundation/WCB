@@ -15,7 +15,7 @@ import urlparse
 # Resolve CLI entity to endpoint and GET, POST, PATCH, DELETE parameters
 ENTITIES = {
     '/': ['', ('',), (), (), ()],
-    'achievement': ['achievement', ('', 'id'), ('name', 'distance'), ('id',), ('id',)],
+    'achievement': ['achievement', ('', 'id'), ('sequence', 'name', 'distance'), ('id',), ('id',)],
     'achievements': ['achievements', ('team', 'achievement'), ('team_id', 'achievement_id'),
                      ('id',), ('id',)],
     'cause': ['causes', ('', 'id'), ('name',), ('id',), ('id',)],
