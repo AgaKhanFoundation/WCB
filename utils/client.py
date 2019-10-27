@@ -27,7 +27,7 @@ ENTITIES = {
                                      'team_building_start', 'team_building_end', 'default_steps'),
                ('id',), ('id',)],
     'locality': ['localities', ('', 'id'), ('name',), ('id',), ('id',)],
-    'participant': ['participants', ('fbid',), ('fbid',), ('fbid',), ('fbid',)],
+    'participant': ['participants', ('fbid',), ('fbid', 'registered'), ('fbid',), ('fbid',)],
     'record': ['records', ('id',), ('date', 'distance', 'participant_id', 'source_id'), (),
                ('id',)],
     'source': ['sources', ('', 'id'), ('name',), ('id',), ('id',)],
