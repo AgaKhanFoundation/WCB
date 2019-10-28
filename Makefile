@@ -1,6 +1,6 @@
 # Usage: 
 # Install npm packages using package.json
-VERSION:=$(shell npm version| grep wcb | awk '{print $$2}' | sed "s/[\',]//g")
+VERSION:=$(shell npm version| grep wcb | awk '{print $$3}' | sed "s/[\',]//g")
 APP_NAME="wcb"
 REPO_NAME="agakhanfoundation"
 
