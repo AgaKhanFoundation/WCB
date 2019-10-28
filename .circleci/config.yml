@@ -1,8 +1,31 @@
 version: 2
 jobs:
-  build:
+  lint:
     docker:
       - image: circleci/node:10.16.3
     steps:
       - checkout
-      - run: make lint
+      - run:
+          name: Running Lints...
+          command: make lint
+
+  test:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - run:
+          name: Running Tests...
+          command: make test
+  
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Building Docker Image...
+          command: make build
+
+    
+
+

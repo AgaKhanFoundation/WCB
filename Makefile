@@ -11,7 +11,7 @@ install:
 test: install
 	@npm test
 
-lint: install test
+lint: install
 	@npm run lint
 
 develop: install test lint
