@@ -25,6 +25,24 @@ jobs:
       - run:
           name: Building Docker Image...
           command: make build
+  
+  release:
+    docker:
+      - image: circleci/node:10.16.3
+    
+
+    requires: 
+      - test
+      - lint
+      - install
+    steps:
+      - checkout 
+      - setup_remote_docker:
+      - run:
+          name: Release to Quay and Git master
+          command: make release
+
+
 
 workflows:
   version: 2
@@ -33,6 +51,12 @@ workflows:
       - lint
       - test
       - build
+      # - deploy-prod:
+      #   requires:
+      #     - build
+      #   filters:
+      #     branches:
+      #       only: master
     
 
 
