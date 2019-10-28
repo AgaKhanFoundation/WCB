@@ -18,10 +18,14 @@ develop: install test lint
 	@npm run start-dev
 
 build:
+	@echo $(APP_NAME):$(VERSION)
 	@docker build . --tag $(APP_NAME):$(VERSION)
 	
 release: 
-	# @npm version --no-git-tag-version minors
+	@npm version --no-git-tag-version minors
 
 	@docker build . --tag quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)
 	@docker push quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)
+	@git add .
+	@git commit -m "<version> [ci skip]"
+	
