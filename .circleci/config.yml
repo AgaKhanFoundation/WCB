@@ -29,18 +29,14 @@ jobs:
   release:
     docker:
       - image: circleci/node:10.16.3
-    
-
-    requires: 
-      - test
-      - lint
-      - install
     steps:
       - checkout 
       - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Release to Quay and Git master
           command: make release
+      
 
 
 
@@ -51,12 +47,17 @@ workflows:
       - lint
       - test
       - build
-      # - deploy-prod:
-      #   requires:
-      #     - build
-      #   filters:
-      #     branches:
-      #       only: master
-    
+  
+  build_release:
+    jobs:
+      - release
+          requires:
+            - test
+            - install
+            - lint
+          filters:
+            branches:
+              only: master
+
 
 
