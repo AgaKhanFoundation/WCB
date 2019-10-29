@@ -33,8 +33,16 @@ jobs:
       - checkout 
       - setup_remote_docker
       - run:
+          name: Configuring Git credentials...
+          command: |
+            git config user.email "moiz.nidhi+ci@gmail.com"
+            git config user.name "ci-build"
+      - add_ssh_keys:
+          fingerprints:
+            - "7d:c8:37:dc:e9:4c:cd:f5:7c:2d:a4:e7:3f:5f:e2:d4"
+      - run:
           name: Release to Quay and Git master
-          command: make release
+          command: make release 
       
 
 
