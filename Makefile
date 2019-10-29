@@ -27,6 +27,6 @@ release:
 	@docker login -u="${QUAY_USERNAME}" -p="${QUAY_TOKEN}" quay.io
 	@docker build . --tag quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)-testing
 	@docker push quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)-testing
-	@git commit -m "<version> [ci skip]"
+	@git commit -m "$(VERSION) [ci skip]"
 	@git push origin master
 	
