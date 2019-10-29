@@ -50,8 +50,8 @@ workflows:
       - release:
           requires:
             - test
-            - install
             - lint
+            - build
           filters:
             branches:
               only: master
