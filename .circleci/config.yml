@@ -50,7 +50,7 @@ workflows:
   
   build_release:
     jobs:
-      - release
+      - release:
           requires:
             - test
             - install
