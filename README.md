@@ -11,11 +11,7 @@ Work in progress!
 ## Development
 
 ```
-echo "SERVER_PASSWORD=<password>" >> .env
-npm install
-npm run lint
-npm test
-npm run start-dev
+make develop
 ```
 
 ### Database Migrations
@@ -37,7 +33,7 @@ npm run migrate:undo
 To build the docker container locally
 
 ```
-docker build -t <name> .
+make build
 ```
 
 To run docker container locally

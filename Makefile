@@ -7,6 +7,7 @@ REPO_NAME="agakhanfoundation"
 
 install:
 	@npm install
+	echo "SERVER_PASSWORD=<password>" >> .env
 
 test: install
 	@npm test
