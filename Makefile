@@ -26,8 +26,8 @@ release:
 	@npm version --no-git-tag-version minor
 	@git add package*.json
 	@docker login -u="${QUAY_USERNAME}" -p="${QUAY_TOKEN}" quay.io
-	@docker build . --tag quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)-testing
-	@docker push quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)-testing
+	@docker build . --tag quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)
+	@docker push quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)
 	@git commit -m "$(VERSION) [ci skip]"
 	@git push origin master
 	
