@@ -32,3 +32,9 @@ steps:
   inputs:
     command: 'custom'
     customCommand: 'test'
+- task: Docker@2
+  inputs:
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+    buildContext: '**'
+    tags: 'WCB:$(Build.BuildId)'
