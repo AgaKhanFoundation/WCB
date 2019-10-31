@@ -9,15 +9,26 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  RELEASE: ''
+
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.16.3'
   displayName: 'Install Node.js'
-
 - task: Npm@1
   inputs:
     command: 'install'
+- script: |
+    echo -n "${DEVELOPMENT_ACCESSTOKEN}" > .env
+  condition: eq(variables['Build.Reason'], 'PullRequest')
+- script: |
+    echo -n "${STAGING_ACCESSTOKEN}" > .env
+  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), eq(variables.RELEASE, ''))
+- script: |
+    echo -n "${PRODUCTION_ACCESSTOKEN}" > .env
+  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(eq(variables.RELEASE, '')))
 - task: Npm@1
   inputs:
     command: 'custom'
