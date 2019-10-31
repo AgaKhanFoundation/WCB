@@ -23,10 +23,10 @@ steps:
   condition: eq(variables['Build.Reason'], 'PullRequest')
 - script: |
     echo -n "${}" > .env
-  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), eq(Release.ReleaseId, ''))
+  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), eq($(Release.ReleaseId), ''))
 - script: |
     echo -n "${}" > .env
-  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(eq(Release.ReleaseId, '')))
+  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(eq($(Release.ReleaseId), '')))
 - task: Npm@1
   inputs:
     command: 'custom'
