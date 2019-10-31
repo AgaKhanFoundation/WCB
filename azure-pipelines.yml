@@ -18,6 +18,15 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
+- script: |
+    echo -n "${DEVELOPMENT_ACCESSTOKEN}" > .env
+  condition: eq(variables['Build.Reason'], 'PullRequest')
+- script: |
+    echo -n "${}" > .env
+  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), eq(Release.ReleaseId, ''))
+- script: |
+    echo -n "${}" > .env
+  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(eq(Release.ReleaseId, '')))
 - task: Npm@1
   inputs:
     command: 'custom'
@@ -27,8 +36,6 @@ steps:
     command: 'custom'
     customCommand: 'run lint'
 - task: Npm@1
-  env:
-    SERVER_PASSWORD: '$(APPLICATION_SECRET)'
   inputs:
     command: 'custom'
     customCommand: 'test'
