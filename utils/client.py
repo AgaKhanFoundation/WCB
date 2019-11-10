@@ -34,6 +34,7 @@ ENTITIES = {
     'sponsor': ['sponsor', (), (), (), ()],
     'sponsors': ['sponsors', (), (), (), ()],
     'team': ['teams', ('', 'id'), ('name', 'creator_id', 'hidden'), ('id',), ('id',)],
+    'notificationRegistration': ['notificationRegistrations', ('fbid',), ('fbid', 'fcmToken'), ('fbid',), ('fbid',)],
 }
 
 CRUD = {
