@@ -1,6 +1,6 @@
 {
   "name": "wcb",
-  "version": "0.1.0",
+  "version": "0.12.0",
   "description": "restFul server for wcf mobile apps",
   "main": "index.js",
   "private": true,
