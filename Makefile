@@ -1,8 +1,8 @@
 # Usage: 
 # Install npm packages using package.json
-VERSION:=$(shell npm version| grep wcb | awk '{print $$3}' | sed "s/[\',]//g")
 APP_NAME="wcb"
 REPO_NAME="agakhanfoundation"
+GET_VERSION = $$(npm version| grep wcb | awk '{print $$3}' | sed "s/[\',]//g")
 
 
 install:
@@ -19,15 +19,18 @@ develop: install test lint
 	@npm run start-dev
 
 build:
-	@echo $(APP_NAME):$(VERSION)
-	@docker build . --tag $(APP_NAME):$(VERSION)
+	# This is just to test if the Dockerfile is buildable.
+	@docker build .
 	
 release: 
 	@npm version --no-git-tag-version minor
 	@git add package*.json
+	@echo docker build . --tag quay.io/$(REPO_NAME)/$(APP_NAME):$(GET_VERSION)
 	@docker login -u="${QUAY_USERNAME}" -p="${QUAY_TOKEN}" quay.io
-	@docker build . --tag quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)
-	@docker push quay.io/$(REPO_NAME)/$(APP_NAME):$(VERSION)
-	@git commit -m "$(VERSION) [ci skip]"
+	@docker build . --tag quay.io/$(REPO_NAME)/$(APP_NAME):${GET_VERSION}
+	@docker push quay.io/$(REPO_NAME)/$(APP_NAME):$(GET_VERSION)
+	@git commit -m "$(GET_VERSION) [ci skip]"
+	@git tag -a $(GET_VERSION) -m "Updating to version `$(GET_VERSION)`"
+	@git push origin $(GET_VERSION)
 	@git push origin master
 	
