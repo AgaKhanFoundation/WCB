@@ -34,12 +34,13 @@ steps:
   inputs:
     command: 'custom'
     customCommand: 'run lint'
-- task: Npm@1
-  env:
-    SERVER_PASSWORD: '$(APPLICATION_SECRET)'
+- script: |
+    npx nyc --reporter cobertura --report-dir $(System.DefaultWorkingDirectory)/coverage npm run test
+- task: PublishCodeCoverageResults@1
   inputs:
-    command: 'custom'
-    customCommand: 'test'
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml'
+    failIfCoverageEmpty: true
 - task: Docker@2
   inputs:
     command: 'build'
