@@ -1,4 +1,4 @@
-FROM node:10.16.3
+FROM node:12.13.1
 
 # Create App directory
 RUN mkdir -p /usr/src/app
