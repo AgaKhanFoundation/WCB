@@ -117,10 +117,10 @@ describe('achievement', () => {
         })
     })
     it('should return 409 if achievement name conflict', async () => {
-      let a2 = await models.db.achievement.create({sequence: 1, name: 'Paris', distance: 100})
+      let a2 = await models.db.achievement.create({sequence: 1, name: 'London', distance: 100, description: 'AKF UK', flag_name: 'greatbritain', map_image: 'challenge1_0.png', title: 'Article1', subtitle: 'Author1', content: 'content1 with html tags', media: 'photo:photo1_url video:video1_url'})
       await koaRequest
         .post('/achievement')
-        .send({sequence: 0, name: a2.name, distance: a2.distance})
+        .send({sequence: 0, name: a2.name, distance: a2.distance, description: a2.description, flag_name: a2.flag_ame, map_image: a2.map_image, title: a2.title, subtitle: a2.subtitle, content: a2.content, media: a2.media})
         .expect(409, {'error': {
           'code': 409,
           'message': `achievement with sequence="0" or named "${a2.name}" already exists`
@@ -130,7 +130,7 @@ describe('achievement', () => {
       let a2 = await models.db.achievement.create({sequence: 1, name: 'Paris', distance: 100})
       await koaRequest
         .post('/achievement')
-        .send({sequence: a2.sequence, name: 'London', distance: 200})
+        .send({sequence: a2.sequence, name: 'London', distance: a2.distance, description: a2.description, flag_name: a2.flag_ame, map_image: a2.map_image, title: a2.title, subtitle: a2.subtitle, content: a2.content, media: a2.media})
         .expect(409, {'error': {
           'code': 409,
           'message': `achievement with sequence="${a2.sequence}" or named "London" already exists`
