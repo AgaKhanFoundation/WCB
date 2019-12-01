@@ -34,6 +34,7 @@ ENTITIES = {
     'sponsor': ['sponsor', (), (), (), ()],
     'sponsors': ['sponsors', (), (), (), ()],
     'team': ['teams', ('', 'id'), ('name', 'creator_id', 'hidden'), ('id',), ('id',)],
+    'fcmtoken': ['fcmtokens', ('', 'id'), ('fcm_token','fbid',), ('id',), ('id',)],
 }
 
 CRUD = {
@@ -57,7 +58,6 @@ def construct_url(endpoint):
         netloc = domain
     url = urlparse.urlunparse((scheme, netloc, endpoint, '', '', ''))
     return url
-
 
 def get(entity, endpoint, action, url, args):
     """Construct a GET request for the given entity and parameters."""
