@@ -16,7 +16,7 @@ import urlparse
 ENTITIES = {
     '/': ['', ('',), (), (), ()],
     'achievement': ['achievement', ('', 'id'),
-                    ('sequence', 'name', 'distance', 'description', 'flag_name', 'map_image',
+                    ('sequence', 'name', 'distance', 'description', 'icon_name', 'map_image',
                      'title', 'subtitle', 'content', 'media' ),
                     ('id',), ('id',)],
     'achievements': ['achievements', ('team', 'achievement'), ('team_id', 'achievement_id'),
