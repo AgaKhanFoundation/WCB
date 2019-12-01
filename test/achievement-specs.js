@@ -14,24 +14,24 @@ describe('achievement', () => {
         sequence: 1,
         name: 'London',
         distance: 100,
-        description: 'AKF UK',
+        description: 'AKF United Kingdom',
         flag_name: 'greatbritain',
         map_image: 'challenge1_0.png',
         title: 'Article1',
         subtitle: 'Author1',
-        content: 'content1 with html tags',
+        content: '<p>Aga Khan University became the leading healthcare institution in Pakistan and influences healthcare practice and policy across the country. AKU Hospital will continue to develop skills of healthcare professionals like Zainab to deliver world-class care.</p><br><br>Read the full story here:<br><a href=\"https://www.akfusa.org/our-stories/reaching-new-heights-in-national-healthcare/\" target=\"_blank\">https://www.akfusa.org/our-stories/reaching-new-heights-in-national-healthcare/</a>',
         media: 'photo:photo1_url video:video1_url'
       })
       let a2 = await models.db.achievement.create({
         sequence: 2,
         name: 'Paris',
         distance: 200,
-        description: 'AKF Paris',
+        description: 'AKF Kenya',
         flag_name: 'france',
         map_image: 'challenge1_1.png',
         title: 'Article2',
         subtitle: 'Author2',
-        content: 'content2 with html tags',
+        content: '<p>A Grade 9 student at Joy Primary School in Mathare admits \"I was not good at reading,\".</p><p>That changed by Start-A-Library campaign supported by the Aga Khan Foundation and the Yetu Initiative.</p><br>Read full story here:<br><a href=\"https://www.akfusa.org/our-stories/primary-secondary-stretching-their-wings/\" target=\"_blank\">https://www.akfusa.org/our-stories/primary-secondary-stretching-their-wings/</a>.',
         media: 'photo:photo2_url video:video2_url'
       })
       await koaRequest
