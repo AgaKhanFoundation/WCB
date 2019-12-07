@@ -196,7 +196,7 @@ describe('achievement', () => {
           name: 'London',
           distance: a2.distance,
           description: a2.description,
-          icon_name: a2.flag_ame,
+          icon_name: a2.icon_name,
           map_image: a2.map_image,
           title: a2.title,
           subtitle: a2.subtitle,
