@@ -115,8 +115,8 @@ describe('achievement', () => {
 
   context('POST /achievement', () => {
     it('should create achievement with sequence=sequence, name=name, distance=distance,' +
-      'description=description, icon_name=icon_name, map_image=map_image,' +
-      'title=title, subtitle=subtitle, content=subtitle, and media=media', async () => {
+      ' description=description, icon_name=icon_name, map_image=map_image,' +
+      ' title=title, subtitle=subtitle, content=subtitle, and media=media', async () => {
       let sequence = 1
       let name = 'London'
       let distance = 100
@@ -175,7 +175,7 @@ describe('achievement', () => {
           name: a2.name,
           distance: a2.distance,
           description: a2.description,
-          icon_name: a2.flag_ame,
+          icon_name: a2.icon_name,
           map_image: a2.map_image,
           title: a2.title,
           subtitle: a2.subtitle,
