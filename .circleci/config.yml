@@ -2,7 +2,7 @@ version: 2
 jobs:
   lint:
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:12.13.1
     steps:
       - checkout
       - run:
@@ -11,13 +11,13 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:12.13.1
     steps:
       - checkout
       - run:
           name: Running Tests...
           command: make test
-  
+
   build:
     machine: true
     steps:
@@ -25,12 +25,12 @@ jobs:
       - run:
           name: Building Docker Image...
           command: make build
-  
+
   release:
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:12.13.1
     steps:
-      - checkout 
+      - checkout
       - setup_remote_docker
       - run:
           name: Configuring Git credentials...
@@ -42,8 +42,8 @@ jobs:
             - "7d:c8:37:dc:e9:4c:cd:f5:7c:2d:a4:e7:3f:5f:e2:d4"
       - run:
           name: Release to Quay and Git master
-          command: make release 
-      
+          command: make release
+
 
 
 
@@ -62,6 +62,3 @@ workflows:
           filters:
             branches:
               only: master
-
-
-
