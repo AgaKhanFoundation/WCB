@@ -29,6 +29,7 @@ describe('notifications', () => {
         .get('/notifications')
         .expect(200)
         .then(response => {
+          console.log('response: ' + response.body[0].message)
           response.body[0].message.should.equal(n1.message)
           response.body[0].message_date.should.be.sameMoment(n1.message_date)
           response.body[0].expiry_date.should.be.sameMoment(n1.expiry_date)
@@ -71,7 +72,7 @@ describe('notifications', () => {
     })
   })
 
-// REVISE this to check dup using message and messageDate only. Also check eventId if it was provided
+  // REVISE this to check dup using message and messageDate only. Also check eventId if it was provided
   context('POST /notifications', () => {
     it('should create notification with message="notification 1"', async () => {
       let message = 'notification 1'
@@ -104,11 +105,11 @@ describe('notifications', () => {
       let priority = 10
       let eventId = 1
       let n1 = await models.db.notification.create({
-         message: message,
-         message_date: messageDate,
-         expiry_date:  expiryDate,
-         priority: priority,
-         event_id: eventId
+        message: message,
+        message_date: messageDate,
+        expiry_date: expiryDate,
+        priority: priority,
+        event_id: eventId
       })
       await koaRequest
         .post('/notifications')
@@ -121,7 +122,7 @@ describe('notifications', () => {
         })
         .expect(409, {'error': {
           'code': 409,
-          'message': "this notification message for message_date and event_id already exists"
+          'message': 'this notification message for message_date and event_id already exists'
         }})
     })
   })
@@ -135,7 +136,7 @@ describe('notifications', () => {
       let priority = 10
       let eventId = 1
       let n1 = await models.db.notification.create({
-        message: message ,
+        message: message,
         message_date: messageDate,
         expiry_date: expiryDate,
         priority: priority,
@@ -181,7 +182,7 @@ describe('notifications', () => {
         .send({message: n3.message,
           message_date: n3.message_date,
           event_id: n3.event_id
-         })
+        })
         .expect(400, {'error': {
           'code': 400,
           'message': 'Validation error'
@@ -189,7 +190,7 @@ describe('notifications', () => {
     })
   })
 
-//verify that
+  // verify that
   context('DELETE /notifications/:id', () => {
     it('should delete notification with id=id', async () => {
       let message = 'notification 1'
