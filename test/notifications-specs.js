@@ -122,7 +122,7 @@ describe('notifications', () => {
         })
         .expect(409, {'error': {
           'code': 409,
-          'message': 'this notification message for message_date and event_id already exists'
+          'message': 'this notification message for message_date already exists'
         }})
     })
   })
