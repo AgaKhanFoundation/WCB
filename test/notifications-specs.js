@@ -11,17 +11,19 @@ beforeEach(function syncDB () {
 describe('notifications', () => {
   context('GET /notifications', () => {
     it('should return notifications', async () => {
+      let nextWeek = (new Date() + 7).toString('yyyy-mm-dd-mmThh:mm:ssZ')
+
       let n1 = await models.db.notification.create({
         message: 'notification 1',
         message_date: '2019-12-01T00:00:00Z',
-        expiry_date: '2019-12-31T00:00:00Z',
+        expiry_date: nextWeek,
         priority: 10,
         event_id: 1
       })
       let n2 = await models.db.notification.create({
         message: 'notification 2',
         message_date: '2019-12-01T00:00:00Z',
-        expiry_date: '2019-12-31T00:00:00Z',
+        expiry_date: nextWeek,
         priority: 10,
         event_id: 1
       })
@@ -29,7 +31,6 @@ describe('notifications', () => {
         .get('/notifications')
         .expect(200)
         .then(response => {
-          console.log('response: ' + response.body[0].message)
           response.body[0].message.should.equal(n1.message)
           response.body[0].message_date.should.be.sameMoment(n1.message_date)
           response.body[0].expiry_date.should.be.sameMoment(n1.expiry_date)
@@ -229,7 +230,7 @@ describe('notifications-event', () => {
       let n1 = await models.db.notification.create({
         message: 'notification 1',
         message_date: '2019-12-01T00:00:00Z',
-        expiry_date: '2019-12-31T00:00:00Z',
+        expiry_date: '2020-12-31T00:00:00Z',
         priority: 10,
         event_id: 1
       })

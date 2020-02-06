@@ -27,32 +27,29 @@ describe('notifications-participant', () => {
     })
 
     it('should return notifications for participant with fbid', async () => {
+      let nextWeek1 = (new Date() + 7).toString("YYYY-MM-DD'T'HH:mm:ssZ")
       let p1 = await models.db.participant.create({fbid: 'p1'})
       let n1 = await models.db.notification.create({
         message: 'notification 1',
         message_date: '2019-12-01T00:00:00Z',
-        expiry_date: '2019-12-31T00:00:00Z',
+        expiry_date: nextWeek1,
         priority: 10,
         event_id: 1
       })
-      // let n2 = await models.db.notification.create({
-      //   message: 'notification 2',
-      //   message_date: '2019-12-01T00:00:00Z',
-      //   expiry_date: '2019-12-31T00:00:00Z',
-      //   priority: 10,
-      //   event_id: 1
-      // })
 
-      await models.db.participant_notification.create({
-        participant_id: p1.id,
-        notification_id: n1.id,
-        read: false
-      })
+      await models.db.participant_notification
+        .findOrCreate({where: {
+          participant_id: p1.id,
+          notification_id: n1.id,
+          read_flag: false
+        }})
+
       await koaRequest
         .get('/notifications/participant/' + p1.fbid)
         .expect(200)
         .then(response => {
-          response.body[0].participant_id.should.equal(p1.id)
+          response.body[0].message.should.equal(n1.message)
+          response.body[0].event_id.should.equal(n1.event_id)
           response.body[0].notification_id.should.equal(n1.id)
         })
     })
