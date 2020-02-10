@@ -189,10 +189,9 @@ describe('fcmtokens', () => {
   context('PATCH /fcmtokens/token/:token', () => {
     it('should assign participant_id to fcmtoken fcm_token=token', async () => {
       let token1 = 'token1'
-      let f1 = await models.db.fcmtoken.create({ fcm_token: token1 })
+      let f1 = await models.db.fcmtoken.create({fcm_token: token1})
       if (f1) {
         let p1 = await models.db.participant.create({fbid: 'fbid1'})
-        let token2 = 'token2'
         await koaRequest
           .patch('/fcmtokens/token/' + f1.fcm_token)
           .send({
@@ -200,9 +199,9 @@ describe('fcmtokens', () => {
             fcm_token: token1
           })
           .expect(200, [1])
-          let f2 = await models.db.fcmtoken.findById(f1.id)
-          f2.fcm_token.should.equal(token1)
-          f2.participant_id.should.equal(p1.id)
+        let f2 = await models.db.fcmtoken.findById(f1.id)
+        f2.fcm_token.should.equal(token1)
+        f2.participant_id.should.equal(p1.id)
       }
     })
     it('should return 400 if no fcmtoken with token=token', async () => {
@@ -233,9 +232,9 @@ describe('fcmtokens', () => {
             fcm_token: token2
           })
           .expect(200, [1])
-          let f2 = await models.db.fcmtoken.findById(f1.id)
-          f2.fcm_token.should.equal(token2)
-          f2.participant_id.should.equal(p1.id)
+        let f2 = await models.db.fcmtoken.findById(f1.id)
+        f2.fcm_token.should.equal(token2)
+        f2.participant_id.should.equal(p1.id)
       }
     })
     it('should return 400 if no participant fbid=fbid', async () => {
@@ -260,8 +259,8 @@ describe('fcmtokens', () => {
           'code': 400,
           'message': `fcmtoken for fbid "${fbid}" does not exist`
         }})
+    })
   })
-})
   context('DELETE /fcmtokens/:id', () => {
     it('should delete fcmtoken with id=id', async () => {
       let fcmtoken = await models.db.fcmtoken.create({
