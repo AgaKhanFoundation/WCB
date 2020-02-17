@@ -7,7 +7,6 @@ beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
 })
 
-// 'message', 'message_date', 'expiry_date', 'priority', 'event_id', 'read_flag'
 describe('notifications-participant', () => {
   context('GET /notifications/participant/:fbid', () => {
     it('should return 204 if no participant found with fbid=fbid', async () => {
@@ -27,12 +26,13 @@ describe('notifications-participant', () => {
     })
 
     it('should return notifications for participant with fbid', async () => {
-      let nextWeek1 = (new Date() + 7).toString("YYYY-MM-DD'T'HH:mm:ssZ")
+      let yesterday = ( d => new Date(d.setDate(d.getDate() - 1)) )(new Date)
+      let nextWeek = ( d => new Date(d.setDate(d.getDate() + 7)) )(new Date)
       let p1 = await models.db.participant.create({fbid: 'p1'})
       let n1 = await models.db.notification.create({
         message: 'notification 1',
-        message_date: '2019-12-01T00:00:00Z',
-        expiry_date: nextWeek1,
+        message_date: yesterday,
+        expiry_date: nextWeek,
         priority: 10,
         event_id: 1
       })
@@ -50,8 +50,9 @@ describe('notifications-participant', () => {
         .then(response => {
           response.body[0].message.should.equal(n1.message)
           response.body[0].event_id.should.equal(n1.event_id)
-          response.body[0].notification_id.should.equal(n1.id)
+          response.body[0].id.should.equal(n1.id)
         })
     })
   })
+
 })

@@ -11,18 +11,19 @@ beforeEach(function syncDB () {
 describe('notifications', () => {
   context('GET /notifications', () => {
     it('should return notifications', async () => {
-      let nextWeek = (new Date() + 7).toString('yyyy-mm-dd-mmThh:mm:ssZ')
+      let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+      let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
 
       let n1 = await models.db.notification.create({
         message: 'notification 1',
-        message_date: '2019-12-01T00:00:00Z',
+        message_date: yesterday,
         expiry_date: nextWeek,
         priority: 10,
         event_id: 1
       })
       let n2 = await models.db.notification.create({
         message: 'notification 2',
-        message_date: '2019-12-01T00:00:00Z',
+        message_date: yesterday,
         expiry_date: nextWeek,
         priority: 10,
         event_id: 1
@@ -47,6 +48,8 @@ describe('notifications', () => {
   })
 
   context('GET /notifications/:id', () => {
+    let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+    let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
     it('should return 204 if no notification with id=id', async () => {
       await koaRequest
         .get('/notifications/1')
@@ -55,8 +58,8 @@ describe('notifications', () => {
     it('should return notification with id=id', async () => {
       let n1 = await models.db.notification.create({
         message: 'notification 1',
-        message_date: '2019-12-01T00:00:00Z',
-        expiry_date: '2019-12-31T00:00:00Z',
+        message_date: yesterday,
+        expiry_date: nextWeek,
         priority: 10,
         event_id: 1
       })
@@ -75,40 +78,38 @@ describe('notifications', () => {
 
   // REVISE this to check dup using message and messageDate only. Also check eventId if it was provided
   context('POST /notifications', () => {
+    let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+    let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
     it('should create notification with message="notification 1"', async () => {
       let message = 'notification 1'
-      let messageDate = '2019-12-01T00:00:00Z'
-      let expiryDate = '2019-12-31T00:00:00Z'
       let priority = 10
       let eventId = 1
       await koaRequest
         .post('/notifications')
         .send({
           message: message,
-          message_date: messageDate,
-          expiry_date: expiryDate,
+          message_date: yesterday,
+          expiry_date: nextWeek,
           priority: priority,
           event_id: eventId
         })
         .expect(201)
         .then(response => {
           response.body.message.should.equal(message)
-          response.body.message_date.should.be.sameMoment(messageDate)
-          response.body.expiry_date.should.be.sameMoment(expiryDate)
+          response.body.message_date.should.be.sameMoment(yesterday)
+          response.body.expiry_date.should.be.sameMoment(nextWeek)
           response.body.priority.should.equal(priority)
           response.body.event_id.should.be.equal(eventId)
         })
     })
     it('should return 409 if notification message conflict', async () => {
       let message = 'notification 1'
-      let messageDate = '2019-12-01T00:00:00Z'
-      let expiryDate = '2019-12-31T00:00:00Z'
       let priority = 10
       let eventId = 1
       let n1 = await models.db.notification.create({
         message: message,
-        message_date: messageDate,
-        expiry_date: expiryDate,
+        message_date: yesterday,
+        expiry_date: nextWeek,
         priority: priority,
         event_id: eventId
       })
@@ -130,16 +131,18 @@ describe('notifications', () => {
 
   // REVISE this to check dup using message and messageDate only. Also check eventId if it was provided
   context('PATCH /notifications/:id', () => {
+    let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+    let tomorrow = (d => new Date(d.setDate(d.getDate() + 1)))(new Date())
+    let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
+
     it('should change notification message, message_date, expiry_date, priority, event_id', async () => {
       let message = 'notification 1'
-      let messageDate = '2019-12-01T00:00:00Z'
-      let expiryDate = '2019-12-31T00:00:00Z'
       let priority = 10
       let eventId = 1
       let n1 = await models.db.notification.create({
         message: message,
-        message_date: messageDate,
-        expiry_date: expiryDate,
+        message_date: yesterday,
+        expiry_date: tomorrow,
         priority: priority,
         event_id: eventId
       })
@@ -147,13 +150,14 @@ describe('notifications', () => {
         .patch('/notifications/' + n1.id)
         .send({
           message: 'message 2',
-          message_date: messageDate,
-          expiry_date: expiryDate,
+          message_date: yesterday,
+          expiry_date: tomorrow,
           priority: priority,
           event_id: eventId
         })
         .expect(200, [1])
     })
+
     it('should return 400 if no notification with id=id', async () => {
       let message = 'notification 1'
       await koaRequest
@@ -164,18 +168,18 @@ describe('notifications', () => {
 
     it('should return 400 if notification message conflict', async () => {
       let n2 = await models.db.notification.create({
-        message: 'notification 1',
-        message_date: '2019-12-01T00:00:00Z',
-        expiry_date: '2019-12-31T00:00:00Z',
+        message: 'notification 10',
+        message_date: yesterday,
+        expiry_date: tomorrow,
         priority: 10,
         event_id: 1
       })
       let n3 = await models.db.notification.create({
-        message: 'notification 2',
-        message_date: '2019-12-31T00:00:00Z',
-        expiry_date: '2019-12-31T00:00:00Z',
+        message: 'notification 20',
+        message_date: yesterday,
+        expiry_date: nextWeek,
         priority: 10,
-        event_id: 2
+        event_id: 1
       })
 
       await koaRequest
@@ -193,13 +197,14 @@ describe('notifications', () => {
 
   // verify that
   context('DELETE /notifications/:id', () => {
+    let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+
     it('should delete notification with id=id', async () => {
       let message = 'notification 1'
-      let messageDate = '2019-12-01T00:00:00Z'
       let eventId = 1
       let n1 = await models.db.notification.create({
         message,
-        message_date: messageDate,
+        message_date: yesterday,
         event_id: eventId
       })
       await koaRequest
@@ -216,6 +221,8 @@ describe('notifications', () => {
 
 describe('notifications-event', () => {
   context('GET /notifications/event/:id', () => {
+    let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+    let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
     it('should return empty if no notifications for event with id=event', async () => {
       await koaRequest
         .get('/notifications/event/1')
@@ -229,8 +236,8 @@ describe('notifications-event', () => {
       let p1 = await models.db.participant.create({fbid: 'p1'})
       let n1 = await models.db.notification.create({
         message: 'notification 1',
-        message_date: '2019-12-01T00:00:00Z',
-        expiry_date: '2020-12-31T00:00:00Z',
+        message_date: yesterday,
+        expiry_date: nextWeek,
         priority: 10,
         event_id: 1
       })
@@ -246,7 +253,7 @@ describe('notifications-event', () => {
         .expect(200)
         .then(response => {
           response.body[0].event_id.should.equal(n1.event_id)
-          response.body[0].notification_id.should.equal(n1.id)
+          response.body[0].id.should.equal(n1.id)
         })
     })
   })
