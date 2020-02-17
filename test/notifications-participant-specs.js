@@ -26,8 +26,8 @@ describe('notifications-participant', () => {
     })
 
     it('should return notifications for participant with fbid', async () => {
-      let yesterday = ( d => new Date(d.setDate(d.getDate() - 1)) )(new Date)
-      let nextWeek = ( d => new Date(d.setDate(d.getDate() + 7)) )(new Date)
+      let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
+      let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
       let p1 = await models.db.participant.create({fbid: 'p1'})
       let n1 = await models.db.notification.create({
         message: 'notification 1',
@@ -55,4 +55,11 @@ describe('notifications-participant', () => {
     })
   })
 
+  context('GET /notifications/participant/:fbid/event/:eventId', () => {
+    it('should return 204 if no participant found with fbid=fbid', async () => {
+      await koaRequest
+        .get('/notifications/participant/p0/event/e0')
+        .expect(204)
+    })
+  })
 })
