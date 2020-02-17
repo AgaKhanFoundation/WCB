@@ -9,7 +9,7 @@ beforeEach(function syncDB () {
 
 describe('notifications-participant', () => {
   context('GET /notifications/event/:eventId', () => {
-    it('should return notifications for event with event', async () => {
+    it('should return notifications for event with eventId', async () => {
       let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
       let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
       let n1 = await models.db.notification.create({
