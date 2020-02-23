@@ -8,26 +8,6 @@ beforeEach(function syncDB () {
 })
 
 describe('fcmtokens', () => {
-  context('GET /fcmtokens/participant/:fbid', () => {
-    it('should return 204 if no fcmtoken with fbid=fbid', async () => {
-      await koaRequest
-        .get('/fcmtokens/participant/' + 'fbid')
-        .expect(204)
-    })
-    it('should return fcmtoken for participant fbid=fbid', async () => {
-      let p2 = await models.db.participant.create({fbid: 'fbid'})
-      let f1 = await models.db.fcmtoken.create({
-        fcm_token: 'token1',
-        participant_id: p2.id})
-      await koaRequest
-        .get('/fcmtokens/participant/' + p2.fbid)
-        .expect(200)
-        .then(response => {
-          response.body.fcm_token.should.equal(f1.fcm_token)
-          response.body.participant_id.should.equal(p2.id)
-        })
-    })
-  })
   context('GET /fcmtokens/:id', () => {
     it('should return 204 if no fcmtoken with id=id', async () => {
       await koaRequest
@@ -43,42 +23,6 @@ describe('fcmtokens', () => {
         .expect(200)
         .then(response => {
           response.body.fcm_token.should.equal(f1.fcm_token)
-        })
-    })
-  })
-  context('GET /fcmtokens/token/:token', () => {
-    it('should return 204 if no fcmtoken with fcm_token=token', async () => {
-      await koaRequest
-        .get('/fcmtokens/token/token1')
-        .expect(204)
-    })
-
-    it('should return fcmtoken with fcm_token=token', async () => {
-      let f1 = await models.db.fcmtoken.create({
-        fcm_token: 'token1'
-      })
-      await koaRequest
-        .get('/fcmtokens/token/' + f1.fcm_token)
-        .expect(200)
-        .then(response => {
-          response.body.fcm_token.should.equal(f1.fcm_token)
-        })
-    })
-  })
-  context('GET /fcmtokensall', () => {
-    it('should return fcmtokens', async () => {
-      let f1 = await models.db.fcmtoken.create({
-        fcm_token: 'token1'
-      })
-      let f2 = await models.db.fcmtoken.create({
-        fcm_token: 'token2'
-      })
-      await koaRequest
-        .get('/fcmtokensall')
-        .expect(200)
-        .then(response => {
-          response.body[0].fcm_token.should.equal(f1.fcm_token)
-          response.body[1].fcm_token.should.equal(f2.fcm_token)
         })
     })
   })
@@ -149,7 +93,6 @@ describe('fcmtokens', () => {
       }
     })
   })
-
   context('PATCH /fcmtokens/:id', () => {
     it('should change fcmtoken fcm_token', async () => {
       let f1 = await models.db.fcmtoken.create({
@@ -185,82 +128,6 @@ describe('fcmtokens', () => {
         }})
     })
   })
-
-  context('PATCH /fcmtokens/token/:token', () => {
-    it('should assign participant_id to fcmtoken fcm_token=token', async () => {
-      let token1 = 'token1'
-      let f1 = await models.db.fcmtoken.create({fcm_token: token1})
-      if (f1) {
-        let p1 = await models.db.participant.create({fbid: 'fbid1'})
-        await koaRequest
-          .patch('/fcmtokens/token/' + f1.fcm_token)
-          .send({
-            fbid: p1.fbid,
-            fcm_token: token1
-          })
-          .expect(200, [1])
-        let f2 = await models.db.fcmtoken.findById(f1.id)
-        f2.fcm_token.should.equal(token1)
-        f2.participant_id.should.equal(p1.id)
-      }
-    })
-    it('should return 400 if no fcmtoken with token=token', async () => {
-      let token = 'test'
-      await koaRequest
-        .patch('/fcmtokens/token/' + token)
-        .send({fcm_token: token})
-        .expect(400, {'error': {
-          'code': 400,
-          'message': `fcmtoken "${token}" does not exist`
-        }})
-    })
-  })
-
-  context('PATCH /fcmtokens/participant/:fbid', () => {
-    it('should updat fcmtoken fcm_token for participant fbid=fbid', async () => {
-      let fbid = 'fbid1'
-      let p1 = await models.db.participant.create({fbid: fbid})
-      let f1 = await models.db.fcmtoken.create({
-        fcm_token: 'token1',
-        participant_id: p1.id
-      })
-      if (f1) {
-        let token2 = 'token2'
-        await koaRequest
-          .patch('/fcmtokens/participant/' + p1.fbid)
-          .send({
-            fcm_token: token2
-          })
-          .expect(200, [1])
-        let f2 = await models.db.fcmtoken.findById(f1.id)
-        f2.fcm_token.should.equal(token2)
-        f2.participant_id.should.equal(p1.id)
-      }
-    })
-    it('should return 400 if no participant fbid=fbid', async () => {
-      let token = 'test'
-      let fbid = 'fbidtest1'
-      await koaRequest
-        .patch('/fcmtokens/participant/' + fbid)
-        .send({fcm_token: token})
-        .expect(400, {'error': {
-          'code': 400,
-          'message': `participant with fbid "${fbid}" does not exist`
-        }})
-    })
-    it('should return 400 if no participant fbid=fbid', async () => {
-      let token = 'test'
-      let fbid = 'fbidtest1'
-      let p1 = await models.db.participant.create({fbid: fbid})
-      await koaRequest
-        .patch('/fcmtokens/participant/' + p1.fbid)
-        .send({fcm_token: token})
-        .expect(400, {'error': {
-          'code': 400,
-          'message': `fcmtoken for fbid "${fbid}" does not exist`
-        }})
-    })
-  })
   context('DELETE /fcmtokens/:id', () => {
     it('should delete fcmtoken with id=id', async () => {
       let fcmtoken = await models.db.fcmtoken.create({
@@ -273,29 +140,6 @@ describe('fcmtokens', () => {
     it('should return 400 if no fcmtoken with id=id', async () => {
       await koaRequest
         .del('/fcmtokens/' + 0)
-        .expect(400)
-    })
-  })
-
-  context('DELETE /fcmtokens/participant/:fbid', () => {
-    it('should delete fcmtoken for participant with fbid=fbid', async () => {
-      let fbid = 'fbid_d1'
-      let p1 = await models.db.participant.create({fbid: fbid})
-      let token1 = 'token1'
-      let fcmtoken = await models.db.fcmtoken.create({
-        fcm_token: token1,
-        participant_id: p1.id
-      })
-      if (fcmtoken) {
-        await koaRequest
-          .del('/fcmtokens/participant/' + p1.fbid)
-          .expect(204)
-      }
-    })
-    it('should return 400 if no fcm_token for participant with fbid=fbid', async () => {
-      let fbid = 'fbi_d2'
-      await koaRequest
-        .del('/fcmtokens/participant/' + fbid)
         .expect(400)
     })
   })
