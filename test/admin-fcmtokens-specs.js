@@ -8,7 +8,7 @@ beforeEach(function syncDB () {
 })
 
 describe('fcmtokens', () => {
-  context('GET /fcmtokensall', () => {
+  context('GET /admin/fcmtokens', () => {
     it('should return fcmtokens', async () => {
       let f1 = await models.db.fcmtoken.create({
         fcm_token: 'token1'
@@ -17,7 +17,7 @@ describe('fcmtokens', () => {
         fcm_token: 'token2'
       })
       await koaRequest
-        .get('/fcmtokensall')
+        .get('/admin/fcmtokens')
         .expect(200)
         .then(response => {
           response.body[0].fcm_token.should.equal(f1.fcm_token)

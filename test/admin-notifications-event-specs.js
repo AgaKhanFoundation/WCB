@@ -7,13 +7,13 @@ beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
 })
 
-describe('notifications-event', () => {
-  context('GET /notifications/event/:id', () => {
+describe('admin-notifications-event', () => {
+  context('GET /admin/notifications/event/:id', () => {
     let yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date())
     let nextWeek = (d => new Date(d.setDate(d.getDate() + 7)))(new Date())
     it('should return empty if no notifications for event with id=event', async () => {
       await koaRequest
-        .get('/notifications/event/1')
+        .get('/admin/notifications/event/0')
         .expect(200)
         .then(response => {
           response.body.should.deep.equal([])
@@ -37,7 +37,7 @@ describe('notifications-event', () => {
       })
 
       await koaRequest
-        .get('/notifications/event/' + n1.event_id)
+        .get('/admin/notifications/event/' + n1.event_id)
         .expect(200)
         .then(response => {
           response.body[0].event_id.should.equal(n1.event_id)
