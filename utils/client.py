@@ -37,6 +37,18 @@ ENTITIES = {
     'sponsor': ['sponsor', (), (), (), ()],
     'sponsors': ['sponsors', (), (), (), ()],
     'team': ['teams', ('', 'id'), ('name', 'creator_id', 'hidden'), ('id',), ('id',)],
+    'fcmtoken': ['fcmtokens', ('id'), ('fcm_token','fbid',), ('id',), ('id',)],
+    'fcmtoken-token': ['fcmtokens/token', (), ('fbid'), ('fbid',), ()],
+    'fcmtoken-participant': ['fcmtokens/participant', (), ('fbid'), ('fbid',), ('fbid',)],
+    'notification': ['notifications', (id'),
+        ('message', 'message_date', 'expiry_date', 'priority', 'event_id',),
+        ('id',), ('id',)],
+    'notifications-participant': ['notifications/participant',
+        ('notification', 'participant'), ('notification_id', 'participant_id'),
+        ('id',), ('id',)],
+    'notifications-event': ['notifications/event', (),('event_id'),(), (),],
+    'admin-fcmtoken': ['admin/fcmtokens', (''), (), (), ()],
+    'admin-notification': ['admin/notifications', (''),(),(),()],
 }
 
 CRUD = {
@@ -60,7 +72,6 @@ def construct_url(endpoint):
         netloc = domain
     url = urlparse.urlunparse((scheme, netloc, endpoint, '', '', ''))
     return url
-
 
 def get(entity, endpoint, action, url, args):
     """Construct a GET request for the given entity and parameters."""
