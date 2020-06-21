@@ -2,6 +2,8 @@
 
 const koaRequest = require('./routes-specs').koaRequest
 const models = require('./routes-specs').models
+const auth = require('./routes-specs').auth
+const sinon = require('sinon')
 
 beforeEach(function syncDB () {
   return models.db.sequelize.sync({force: true})
@@ -71,6 +73,43 @@ describe('participants', () => {
         .expect(200)
         .then(response => {
           response.body.distance.should.equal(r1.distance + r2.distance)
+        })
+    })
+  })
+
+  context('GET /participants/:fbid/social', () => {
+    afterEach(() => {
+      sinon.restore()
+    })
+
+    it('should return 204 if firebase auth does not find a user with fbid', async () => {
+      sinon.stub(auth, 'getUser').returns(null)
+
+      await koaRequest
+        .get('/participants/anything/social')
+        .expect(204)
+    })
+
+    it('should return 204 if auth return a rejected promise', async () => {
+      sinon.stub(auth, 'getUser').throws('error')
+
+      await koaRequest
+        .get('/participants/anything/social')
+        .expect(204)
+    })
+
+    it('should return a user object if found in firebase', async () => {
+      sinon.stub(auth, "getUser").resolves({
+        "displayName": "returned-displayName",
+        "photoURL": "returned-photoURL"
+      })
+
+      await koaRequest
+        .get('/participants/anything/social')
+        .expect(200)
+        .then(response => {
+          response.body.displayName.should.equal("returned-displayName")
+          response.body.photoURL.should.equal("returned-photoURL")
         })
     })
   })
