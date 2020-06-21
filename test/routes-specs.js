@@ -6,6 +6,7 @@ const request = require('supertest')
 const http = require('http')
 const server = require('../lib/server.js')
 const models = require('../lib/models')
+const auth = require('../lib/services/admin').auth
 
 chai.should()
 chai.use(require('chai-as-promised'))
@@ -24,4 +25,4 @@ describe('routes', () => {
   })
 })
 
-module.exports = {koaRequest, models}
+module.exports = {koaRequest, models, auth}
