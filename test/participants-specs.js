@@ -99,17 +99,17 @@ describe('participants', () => {
     })
 
     it('should return a user object if found in firebase', async () => {
-      sinon.stub(auth, "getUser").resolves({
-        "displayName": "returned-displayName",
-        "photoURL": "returned-photoURL"
+      sinon.stub(auth, 'getUser').resolves({
+        'displayName': 'returned-displayName',
+        'photoURL': 'returned-photoURL'
       })
 
       await koaRequest
         .get('/participants/anything/social')
         .expect(200)
         .then(response => {
-          response.body.displayName.should.equal("returned-displayName")
-          response.body.photoURL.should.equal("returned-photoURL")
+          response.body.displayName.should.equal('returned-displayName')
+          response.body.photoURL.should.equal('returned-photoURL')
         })
     })
   })
