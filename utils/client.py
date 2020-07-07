@@ -40,7 +40,7 @@ ENTITIES = {
     'fcmtoken': ['fcmtokens', ('id'), ('fcm_token','fbid',), ('id',), ('id',)],
     'fcmtoken-token': ['fcmtokens/token', (), ('fbid'), ('fbid',), ()],
     'fcmtoken-participant': ['fcmtokens/participant', (), ('fbid'), ('fbid',), ('fbid',)],
-    'notification': ['notifications', (id'),
+    'notification': ['notifications', ('id'),
         ('message', 'message_date', 'expiry_date', 'priority', 'event_id',),
         ('id',), ('id',)],
     'notifications-participant': ['notifications/participant',

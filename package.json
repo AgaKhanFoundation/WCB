@@ -30,6 +30,7 @@
   "homepage": "https://github.com/AgaKhanFoundation/WCB#readme",
   "dependencies": {
     "dotenv": "^8.1.0",
+    "firebase-admin": "^8.12.1",
     "koa": "^2.8.1",
     "koa-basic-auth": "^4.0.0",
     "koa-bodyparser": "^4.2.1",
@@ -54,6 +55,7 @@
     "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
     "nyc": "^14.1.1",
+    "sinon": "^9.0.2",
     "superagent-defaults": "^0.1.14",
     "supertest": "^3.3.0"
   }
