@@ -1,4 +1,4 @@
-FROM node:12.13.1
+FROM node:12-slim
 
 # Create App directory
 RUN mkdir -p /usr/src/app
@@ -8,7 +8,6 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 # Install App dependencies
-
 RUN npm install --silent
 
 # Remove dev dependencies
