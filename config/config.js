@@ -9,11 +9,11 @@ module.exports = {
   },
   staging: {
     'database': 'wcb',
-    'host': 'localhost',
+    'host': process.env.MYSQL_HOST,
     'dialect': 'mysql',
     'port': 3306,
-    'username': process.env.username,
-    'password': process.env.password
+    'username': process.env.MYSQL_USERNAME,
+    'password': process.env.MYSQL_PASSWORD
   },
   development: {
     'dialect': 'sqlite',
