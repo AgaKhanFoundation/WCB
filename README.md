@@ -6,7 +6,7 @@ Work in progress!
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) v12.13.1
+- [Node.js](https://nodejs.org) v14.15.4
 
 ## Development
 
