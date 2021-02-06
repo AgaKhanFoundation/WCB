@@ -1,6 +1,6 @@
 # WCB
 
-[![Build Status](https://travis-ci.org/AgaKhanFoundation/WCB.svg?branch=master)](https://travis-ci.org/AgaKhanFoundation/WCB)
+[![Build Status](https://dev.azure.com/steps4impact/steps4impact/_apis/build/status/backend?branchName=master)](https://dev.azure.com/steps4impact/steps4impact/_build/latest?definitionId=2&branchName=master)
 
 Work in progress!
 
