@@ -1,6 +1,6 @@
 # WCB
 
-[![Build Status](https://dev.azure.com/steps4impact/steps4impact/_apis/build/status/backend?branchName=master)](https://dev.azure.com/steps4impact/steps4impact/_build/latest?definitionId=2&branchName=master)
+[![Build Status](https://dev.azure.com/steps4impact/steps4impact/_apis/build/status/backend?branchName=main)](https://dev.azure.com/steps4impact/steps4impact/_build/latest?definitionId=2&branchName=main)
 
 Work in progress!
 
@@ -40,11 +40,4 @@ To run docker container locally
 
 ```
 docker run -p <host-port>:7777 -e "NODE_ENV=test" -d <name>
-```
-
-To run quay-image-name
-
-```
-docker pull quay.io/nidhisd/wcb
-docker run -p <host-port>:7777 -e "NODE_ENV=test" -d quay.io/nidhisd/wcb
 ```
