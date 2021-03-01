@@ -12,6 +12,7 @@
     "lint": "eslint --ignore-path .gitignore .",
     "migrate": "sequelize --options-path config/sequelize.json db:migrate",
     "migrate:undo": "sequelize --options-path config/sequelize.json db:migrate:undo",
+    "migrate:undo:all": "sequelize --options-path config/sequelize.json db:migrate:undo:all",
     "start": "node .",
     "start-dev": "NODE_ENV=development nodemon .",
     "test": "NODE_ENV=test SERVER_PASSWORD=test nyc mocha --recursive"
