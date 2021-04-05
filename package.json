@@ -8,9 +8,11 @@
     "node": ">=14.15.4"
   },
   "scripts": {
+    "erd": "NODE_ENV=development sequelize-erd --source schema/sequelize.js --destination schema/erdiagram.svg",
     "lint": "eslint --ignore-path .gitignore .",
     "migrate": "sequelize --options-path config/sequelize.json db:migrate",
     "migrate:undo": "sequelize --options-path config/sequelize.json db:migrate:undo",
+    "migrate:undo:all": "sequelize --options-path config/sequelize.json db:migrate:undo:all",
     "start": "node .",
     "start-dev": "NODE_ENV=development nodemon .",
     "test": "NODE_ENV=test SERVER_PASSWORD=test nyc mocha --recursive"
@@ -55,6 +57,7 @@
     "mocha": "^8.2.1",
     "nodemon": "^2.0.7",
     "nyc": "^14.1.1",
+    "sequelize-erd": "^1.3.1",
     "sinon": "^9.2.4",
     "superagent-defaults": "^0.1.14",
     "supertest": "^3.3.0"
