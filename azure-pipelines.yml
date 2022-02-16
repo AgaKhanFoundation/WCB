@@ -4,46 +4,46 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 variables:
-  RELEASE: ''
+  RELEASE: ""
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '14.15.4'
-  displayName: 'Install Node.js'
-- task: Npm@1
-  inputs:
-    command: 'install'
-- script: |
-    echo -n "${DEVELOPMENT_ACCESSTOKEN}" > .env
-  condition: eq(variables['Build.Reason'], 'PullRequest')
-- script: |
-    echo -n "${STAGING_ACCESSTOKEN}" > .env
-  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), eq(variables.RELEASE, ''))
-- script: |
-    echo -n "${PRODUCTION_ACCESSTOKEN}" > .env
-  condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(eq(variables.RELEASE, '')))
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    customCommand: 'build'
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    customCommand: 'run lint'
-- script: |
-    npx nyc --reporter cobertura --report-dir $(System.DefaultWorkingDirectory)/coverage npm run test
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml'
-    failIfCoverageEmpty: true
-- task: Docker@2
-  inputs:
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-    buildContext: '**'
-    tags: 'WCB:$(Build.BuildId)'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "14.19.0"
+    displayName: "Install Node.js"
+  - task: Npm@1
+    inputs:
+      command: "install"
+  - script: |
+      echo -n "${DEVELOPMENT_ACCESSTOKEN}" > .env
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+  - script: |
+      echo -n "${STAGING_ACCESSTOKEN}" > .env
+    condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), eq(variables.RELEASE, ''))
+  - script: |
+      echo -n "${PRODUCTION_ACCESSTOKEN}" > .env
+    condition: and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), not(eq(variables.RELEASE, '')))
+  - task: Npm@1
+    inputs:
+      command: "custom"
+      customCommand: "build"
+  - task: Npm@1
+    inputs:
+      command: "custom"
+      customCommand: "run lint"
+  - script: |
+      npx nyc --reporter cobertura --report-dir $(System.DefaultWorkingDirectory)/coverage npm run test
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: "Cobertura"
+      summaryFileLocation: "$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
+      failIfCoverageEmpty: true
+  - task: Docker@2
+    inputs:
+      command: "build"
+      Dockerfile: "**/Dockerfile"
+      buildContext: "**"
+      tags: "WCB:$(Build.BuildId)"
